@@ -42,7 +42,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void setupUI(View view) {
-        if(!(view instanceof EditText)) {
+        if(!(view instanceof EditText || view instanceof Button)) {
             view.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
                     hideKeyboard(CreateDeckActivity.this);
@@ -101,6 +101,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
                 adapter.notifyDataSetChanged();
                 mQuestionEditText.setText("");
                 mAnswerEditText.setText("");
+                mQuestionEditText.requestFocus();
                 break;
             case R.id.studyButton:
                 Intent intent = new Intent(CreateDeckActivity.this, StudyActivity.class);
