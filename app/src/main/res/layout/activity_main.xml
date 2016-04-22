@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.guest.pomodoro.MainActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:id="@+id/imageView"
+        android:src="@drawable/black_and_white_books"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/titleLayout"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pomodoro Study App"
+            android:id="@+id/titleTextView"
+            android:textSize="30sp"
+            android:textColor="@color/colorPrimaryText"
+            android:layout_gravity="center"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/studyButtonLayout"
+        android:gravity="center"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start Studying!"
+            android:id="@+id/studyButton"
+            android:layout_gravity="bottom"
+            android:background="@color/colorAccent"
+            android:textColor="@color/colorPrimaryLight"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/studyButtonLayout"
+        android:id="@+id/deckButtonLayout">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Make a New Deck"
+            android:id="@+id/makeDeckButton"
+            android:layout_gravity="center_vertical"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/colorPrimaryLight"
+            android:textSize="18sp"
+            android:layout_marginBottom="2dp" />
+    </LinearLayout>
+
+</RelativeLayout>
