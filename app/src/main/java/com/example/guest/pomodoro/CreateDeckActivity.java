@@ -64,6 +64,9 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
                 questions.add(question);
                 answers.add(answer);
                 adapter.notifyDataSetChanged();
+                mQuestionEditText.setText("");
+                mAnswerEditText.setText("");
+                mAnswerEditText.clearFocus();
         }
     }
 }
