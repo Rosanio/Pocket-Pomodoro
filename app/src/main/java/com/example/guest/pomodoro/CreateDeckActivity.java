@@ -1,6 +1,8 @@
 package com.example.guest.pomodoro;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,7 +31,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
     @Bind(R.id.answerEditText) EditText mAnswerEditText;
     @Bind(R.id.addCardButton) Button mAddCardButton;
     @Bind(R.id.cardsListView) ListView mCardsListView;
-    @Bind(R.id.questionTextInputLayout) TextInputLayout mQuestionTextInputLayout;
+    @Bind(R.id.studyButton) Button mStudyButton;
     ArrayList<String> questions = new ArrayList<String>();
     ArrayList<String> answers = new ArrayList<String>();
     ArrayAdapter adapter;
@@ -44,6 +46,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
             view.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
                     hideKeyboard(CreateDeckActivity.this);
+                    findViewById(R.id.parentContainer).requestFocus();
                     return false;
                 }
             });
@@ -64,9 +67,8 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
         ButterKnife.bind(this);
         setupUI(findViewById(R.id.parentContainer));
 
-        mQuestionEditText.requestFocus();
-
         mAddCardButton.setOnClickListener(this);
+        mStudyButton.setOnClickListener(this);
 
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, questions);
         mCardsListView.setAdapter(adapter);
@@ -99,7 +101,12 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
                 adapter.notifyDataSetChanged();
                 mQuestionEditText.setText("");
                 mAnswerEditText.setText("");
-                findViewById(R.id.parentContainer).requestFocus();
+                break;
+            case R.id.studyButton:
+                Intent intent = new Intent(CreateDeckActivity.this, StudyActivity.class);
+                intent.putExtra("questions", questions);
+                intent.putExtra("answers", answers);
+                startActivity(intent);
         }
     }
 }

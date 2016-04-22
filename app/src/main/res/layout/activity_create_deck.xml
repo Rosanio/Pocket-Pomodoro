@@ -32,7 +32,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/contentLayout"
-        android:layout_below="@+id/titleLayout">
+        android:layout_below="@+id/titleLayout"
+        android:layout_above="@+id/studyButtonLayout">
 
         <LinearLayout
             android:orientation="vertical"
@@ -92,6 +93,24 @@
             android:layout_marginTop="15dp" />
 
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/studyButtonLayout"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Study With This Deck"
+            android:id="@+id/studyButton"
+            android:background="@color/colorAccent"
+            android:textColor="@color/colorPrimaryLight"
+            android:textSize="18sp" />
     </LinearLayout>
 
 </RelativeLayout>

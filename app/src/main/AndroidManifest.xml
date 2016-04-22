@@ -15,11 +15,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateDeckActivity">
+        <activity android:name=".CreateDeckActivity"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.guest.pomodoro.MainActivity" />
         </activity>
+        <activity android:name=".StudyActivity"></activity>
     </application>
 
 </manifest>
