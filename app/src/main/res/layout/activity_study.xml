@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
-            android:id="@+id/textView"
+            android:id="@+id/pointsTextView"
             android:textStyle="bold"
             android:textSize="30dp" />
     </LinearLayout>
@@ -57,7 +57,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/editText"
+            android:id="@+id/answerEditText"
             android:hint="Your Answer" />
 
     </LinearLayout>
@@ -75,15 +75,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Submit Answer"
-            android:id="@+id/button"
+            android:id="@+id/submitButton"
             android:background="@color/colorPrimaryDark"
             android:textSize="18dp"
             android:textColor="@color/colorPrimaryLight"
             android:padding="5dp" />
+
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/resultsLayout"
@@ -94,10 +95,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your Answer: Chocolate"
-            android:id="@+id/textView2"
+            android:id="@+id/resultsTextView"
             android:textSize="25dp"
-            android:textColor="@color/colorSecondaryText" />
+            android:textColor="@color/colorSecondaryText"
+            android:layout_marginBottom="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/adjustPointsTextView"
+            android:textSize="22dp" />
     </LinearLayout>
 
 </RelativeLayout>
