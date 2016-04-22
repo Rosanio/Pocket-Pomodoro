@@ -3,6 +3,7 @@ package com.example.guest.pomodoro;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -21,15 +22,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ButterKnife.bind(this);
 
         mDeckButton.setOnClickListener(this);
+        mStudyButton.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.makeDeckButton:
-                Intent intent = new Intent(MainActivity.this, CreateDeckActivity.class);
-                startActivity(intent);
+                Intent studyIntent = new Intent(MainActivity.this, CreateDeckActivity.class);
+                startActivity(studyIntent);
                 break;
+            case R.id.studyButton:
+                Log.d("TAG", "it works");
+                Intent gameIntent = new Intent(MainActivity.this, GameActivity.class);
+                startActivity(gameIntent);
         }
     }
 }
