@@ -1,9 +1,15 @@
 package com.example.guest.pomodoro;
 
+import android.app.Activity;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,15 +29,42 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
     @Bind(R.id.answerEditText) EditText mAnswerEditText;
     @Bind(R.id.addCardButton) Button mAddCardButton;
     @Bind(R.id.cardsListView) ListView mCardsListView;
+    @Bind(R.id.questionTextInputLayout) TextInputLayout mQuestionTextInputLayout;
     ArrayList<String> questions = new ArrayList<String>();
     ArrayList<String> answers = new ArrayList<String>();
     ArrayAdapter adapter;
+
+    public void hideKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    public void setupUI(View view) {
+        if(!(view instanceof EditText)) {
+            view.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideKeyboard(CreateDeckActivity.this);
+                    return false;
+                }
+            });
+        }
+
+        if(view instanceof ViewGroup) {
+            for(int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View innerView = ((ViewGroup) view).getChildAt(i);
+                setupUI(innerView);
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_deck);
         ButterKnife.bind(this);
+        setupUI(findViewById(R.id.parentContainer));
+
+        mQuestionEditText.requestFocus();
 
         mAddCardButton.setOnClickListener(this);
 
@@ -66,7 +99,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
                 adapter.notifyDataSetChanged();
                 mQuestionEditText.setText("");
                 mAnswerEditText.setText("");
-                mAnswerEditText.clearFocus();
+                findViewById(R.id.parentContainer).requestFocus();
         }
     }
 }

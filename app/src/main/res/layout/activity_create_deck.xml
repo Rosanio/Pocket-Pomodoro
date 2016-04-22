@@ -7,7 +7,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.guest.pomodoro.CreateDeckActivity">
+    tools:context="com.example.guest.pomodoro.CreateDeckActivity"
+    android:id="@+id/parentContainer"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -40,7 +43,8 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:id="@+id/questionTextInputLayout">
 
                 <EditText
                     android:id="@+id/questionEditText"
@@ -52,7 +56,8 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:id="@+id/answerTextInputLayout">
 
                 <EditText
                     android:id="@+id/answerEditText"
@@ -69,8 +74,7 @@
                 android:id="@+id/addCardButton"
                 android:background="@color/colorPrimaryDark"
                 android:textColor="@color/colorPrimaryLight"
-                android:padding="5dp"
-                android:layout_marginTop="50dp" />
+                android:padding="5dp" />
 
         </LinearLayout>
 
