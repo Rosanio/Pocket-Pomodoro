@@ -3,6 +3,7 @@ package com.example.guest.pomodoro;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,7 +14,7 @@ import java.util.Random;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class StudyActivity extends AppCompatActivity {
+public class StudyActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Bind(R.id.pointsTextView) TextView mPointsTextView;
     @Bind(R.id.cardTextView) TextView mCardTextView;
@@ -25,6 +26,8 @@ public class StudyActivity extends AppCompatActivity {
     ArrayList<String> answers;
     ArrayList<String> guessedQuestions = new ArrayList<String>();
     Random randomNumberGenerator = new Random();
+    int index;
+    int points;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +38,29 @@ public class StudyActivity extends AppCompatActivity {
         Intent intent = getIntent();
         questions = intent.getStringArrayListExtra("questions");
         answers = intent.getStringArrayListExtra("answers");
-        int index = randomNumberGenerator.nextInt(questions.size());
+        index = randomNumberGenerator.nextInt(questions.size());
         mCardTextView.setText(questions.get(index));
+        mSubmitButton.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.submitButton:
+                String answer = mAnswerEditText.getText().toString();
+                mResultsTextView.setText("Your Answer: " + answer);
+                if(answer.toLowerCase().equals(answers.get(index).toLowerCase())) {
+                    points += 1;
+                    mPointsTextView.setText(String.valueOf(points));
+                    mAdjustPointsTextView.setText("+1 points");
+                } else {
+                    points -= 1;
+                    mPointsTextView.setText(String.valueOf(points));
+                    mAdjustPointsTextView.setText("-1 points");
+                }
+
+        }
+
     }
 }
