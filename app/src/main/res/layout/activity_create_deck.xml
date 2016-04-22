@@ -62,6 +62,16 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Card"
+                android:id="@+id/addCardButton"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimaryLight"
+                android:padding="5dp"
+                android:layout_marginTop="50dp" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -69,7 +79,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/cardListLayout"></LinearLayout>
+            android:id="@+id/cardListLayout">
+
+            <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cardsListView"
+            android:layout_marginTop="15dp" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>
