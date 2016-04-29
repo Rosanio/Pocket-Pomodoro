@@ -9,9 +9,6 @@ import com.example.guest.pomodoro.ui.CardFragment;
 
 import java.util.ArrayList;
 
-/**
- * Created by Matt on 4/29/2016.
- */
 public class CardPagerAdapter extends FragmentPagerAdapter {
     private ArrayList<QA> mQas;
 

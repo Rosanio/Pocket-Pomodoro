@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by Guest on 4/29/16.
- */
 public class QAListAdapter extends RecyclerView.Adapter<QAListAdapter.QAViewHolder> {
     private ArrayList<QA> mQAs = new ArrayList<>();
     private Context mContext;

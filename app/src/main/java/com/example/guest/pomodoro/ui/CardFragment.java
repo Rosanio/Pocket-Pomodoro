@@ -3,6 +3,7 @@ package com.example.guest.pomodoro.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +22,7 @@ import java.util.Random;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class CardFragment extends Fragment {
+public class CardFragment extends Fragment implements View.OnClickListener {
     @Bind(R.id.pointsTextView) TextView mPointsTextView;
     @Bind(R.id.cardTextView) TextView mCardTextView;
     @Bind(R.id.answerEditText) EditText mAnswerEditText;
@@ -56,7 +54,21 @@ public class CardFragment extends Fragment {
         ButterKnife.bind(this, view);
         mPointsTextView.setText(points+"");
         mCardTextView.setText(mQa.getQuestion());
+        mSubmitButton.setOnClickListener(this);
         return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.submitButton:
+                String answer = mAnswerEditText.getText().toString();
+                if(answer.equals(mQa.getAnswer())) {
+                    Log.d("it", "works");
+                    points++;
+                    mPointsTextView.setText(points+"");
+                }
+        }
     }
 
 }
