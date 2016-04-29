@@ -46,27 +46,10 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/answerLayoutLayout"
-        android:layout_below="@+id/viewPager"
-        android:gravity="center"
-        android:paddingBottom="10dp">
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/answerEditText"
-            android:hint="Your Answer" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/submitAnswerLayout"
-        android:layout_below="@+id/answerLayoutLayout"
         android:gravity="center"
-        android:paddingBottom="50dp">
+        android:paddingBottom="50dp"
+        android:layout_below="@+id/editTextLayout">
 
         <Button
             android:layout_width="wrap_content"
@@ -102,6 +85,41 @@
             android:layout_height="wrap_content"
             android:id="@+id/adjustPointsTextView"
             android:textSize="22dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignTop="@+id/editTextLayout"
+        android:id="@+id/playAgainLayout">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Play Again"
+            android:id="@+id/playAgainButton"
+            android:background="@color/colorAccent"
+            android:textColor="@color/colorPrimaryLight"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextLayout"
+        android:layout_below="@+id/viewPager"
+        android:gravity="center">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/answerEditText"
+            android:hint="Your Answer"
+            android:layout_below="@+id/viewPager"
+            android:gravity="center" />
     </LinearLayout>
 
 </RelativeLayout>

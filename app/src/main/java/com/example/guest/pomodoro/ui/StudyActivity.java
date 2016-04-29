@@ -41,19 +41,15 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     //    @Bind(R.id.pointsTextView) TextView mPointsTextView;
     ArrayList<QA> mQas = new ArrayList<>();
     ArrayList<String> answeredQuestions = new ArrayList<>();
-    @Bind(R.id.pointsTextView)
-    TextView mPointsTextView;
-    @Bind(R.id.answerEditText)
-    EditText mAnswerEditText;
-    @Bind(R.id.submitButton)
-    Button mSubmitButton;
-    @Bind(R.id.resultsTextView)
-    TextView mResultsTextView;
-    @Bind(R.id.adjustPointsTextView)
-    TextView mAdjustPointsTextView;
-    @Bind(R.id.viewPager)
-    ViewPager mViewPager;
+    @Bind(R.id.pointsTextView) TextView mPointsTextView;
+    @Bind(R.id.answerEditText) EditText mAnswerEditText;
+    @Bind(R.id.submitButton) Button mSubmitButton;
+    @Bind(R.id.resultsTextView) TextView mResultsTextView;
+    @Bind(R.id.adjustPointsTextView) TextView mAdjustPointsTextView;
+    @Bind(R.id.viewPager) ViewPager mViewPager;
+    @Bind(R.id.playAgainButton) Button mPlayAgainButton;
     private CardPagerAdapter adapterViewPager;
+    private boolean won = false;
 
     int index;
     int points;
@@ -67,7 +63,9 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         if (!(view instanceof EditText)) {
             view.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
-                    hideKeyboard(StudyActivity.this);
+                    if(!won) {
+                        hideKeyboard(StudyActivity.this);
+                    }
                     findViewById(R.id.parentContainer).requestFocus();
                     return false;
                 }
@@ -118,8 +116,11 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                     }
                 }
                 if(answeredQuestions.size()==mQas.size()) {
+                    won = true;
                     mResultsTextView.setText("You've correctly guessed all questions!");
                     mAdjustPointsTextView.setText("Final score: " + points);
+                    mAnswerEditText.setVisibility(View.INVISIBLE);
+                    mPlayAgainButton.setVisibility(View.VISIBLE);
                 }
 
         }
