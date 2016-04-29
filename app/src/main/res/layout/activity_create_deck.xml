@@ -127,6 +127,12 @@
             android:layout_weight="1"
             android:id="@+id/cardListLayout">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/loadingTextView"
+                android:textSize="12sp" />
+
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

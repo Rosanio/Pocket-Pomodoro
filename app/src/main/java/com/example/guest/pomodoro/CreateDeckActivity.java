@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
     @Bind(R.id.studyButton) Button mStudyButton;
     @Bind(R.id.languageSpinner) Spinner mLanguageSpinner;
     @Bind(R.id.translateQuestionButton) Button mTranslateQuestionButton;
+    @Bind(R.id.loadingTextView) TextView mLoadingTextView;
     ArrayList<String> questions = new ArrayList<String>();
     ArrayList<String> answers = new ArrayList<String>();
     ArrayList<QA> qas = new ArrayList<>();
@@ -97,15 +99,32 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addCardButton:
-                Log.d("it", "works");
                 String question = mQuestionEditText.getText().toString();
                 String answer = mAnswerEditText.getText().toString();
-                QA qa = new QA(question, answer);
-                qas.add(qa);
-                adapter.notifyDataSetChanged();
-//                mQuestionEditText.setText("");
-//                mAnswerEditText.setText("");
-//                mQuestionEditText.requestFocus();
+                if(qas.size()==0) {
+                    QA qa = new QA(question, answer);
+                    qas.add(qa);
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Boolean contains = false;
+                    for(int i = 0; i < qas.size(); i++) {
+                        Log.d("it", "works");
+                        if(!qas.get(i).getQuestion().equals(question)) {
+                            contains = true;
+                        }
+                        if(!contains) {
+                            QA qa = new QA(question, answer);
+                            qas.add(qa);
+                            adapter.notifyDataSetChanged();
+                            break;
+                        } else {
+                            Toast.makeText(CreateDeckActivity.this, "This question has already been added", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+                mQuestionEditText.setText("");
+                mAnswerEditText.setText("");
+                mQuestionEditText.requestFocus();
                 break;
             case R.id.studyButton:
                 Intent intent = new Intent(CreateDeckActivity.this, StudyActivity.class);
@@ -115,7 +134,23 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
             case R.id.translateQuestionButton:
                 String language = mLanguageSpinner.getSelectedItem().toString();
                 String text = mQuestionEditText.getText().toString();
-                translateText(text, language);
+                if(qas.size() == 0) {
+                    mLoadingTextView.setText("loading...");
+                    translateText(text, language);
+                } else {
+                    Boolean contains = false;
+                    for(int i = 0; i < qas.size(); i++) {
+                        if(qas.get(i).getQuestion().equals(text)) {
+                            contains = true;
+                        }
+                    }
+                    if(!contains) {
+                        mLoadingTextView.setText("loading...");
+                        translateText(text, language);
+                    } else {
+                        Toast.makeText(CreateDeckActivity.this, "This question has already been added", Toast.LENGTH_LONG).show();
+                    }
+                }
         }
     }
 
@@ -137,6 +172,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
                     @Override
                     public void run() {
                         adapter.notifyDataSetChanged();
+                        mLoadingTextView.setText("");
                     }
                 });
 
