@@ -68,14 +68,55 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <Button
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.66">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add        Card"
+                        android:id="@+id/addCardButton"
+                        android:background="@color/colorPrimary"
+                        android:textColor="@color/colorTextWhite"
+                        android:padding="5dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.33">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Translate Question"
+                        android:id="@+id/translateQuestionButton"
+                        android:background="@color/colorPrimaryDark"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/colorPrimaryLight" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Card"
-                android:id="@+id/addCardButton"
-                android:background="@color/colorPrimaryDark"
-                android:textColor="@color/colorPrimaryLight"
-                android:padding="5dp" />
+                android:text="Select a language to translate to:"
+                android:id="@+id/textView"
+                android:layout_marginTop="15dp" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/languageSpinner" />
 
         </LinearLayout>
 
@@ -86,11 +127,11 @@
             android:layout_weight="1"
             android:id="@+id/cardListLayout">
 
-            <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/cardsListView"
-            android:layout_marginTop="15dp" />
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/recyclerView"
+                android:layout_marginTop="15dp" />
 
         </LinearLayout>
 
