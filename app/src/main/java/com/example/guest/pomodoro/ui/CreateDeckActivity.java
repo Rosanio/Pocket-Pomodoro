@@ -145,7 +145,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
                 String text = mQuestionEditText.getText().toString();
                 if(text.length() > 0) {
                     if(qas.size() == 0) {
-                        mLoadingTextView.setText("loading...");
+                        mLoadingTextView.setText("translating...");
                         translateText(text, language);
                     } else {
                         Boolean contains = false;
@@ -155,7 +155,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
                             }
                         }
                         if(!contains) {
-                            mLoadingTextView.setText("loading...");
+                            mLoadingTextView.setText("translating...");
                             translateText(text, language);
                         } else {
                             Toast.makeText(CreateDeckActivity.this, "This question has already been added", Toast.LENGTH_LONG).show();

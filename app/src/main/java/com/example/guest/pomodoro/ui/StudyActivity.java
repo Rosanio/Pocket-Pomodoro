@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.guest.pomodoro.R;
 import com.example.guest.pomodoro.adapters.CardPagerAdapter;
@@ -39,6 +40,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
     //    @Bind(R.id.pointsTextView) TextView mPointsTextView;
     ArrayList<QA> mQas = new ArrayList<>();
+    ArrayList<String> answeredQuestions = new ArrayList<>();
     @Bind(R.id.pointsTextView)
     TextView mPointsTextView;
     @Bind(R.id.answerEditText)
@@ -98,20 +100,45 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.submitButton:
-                String answer = mAnswerEditText.getText().toString();
+
                 index = mViewPager.getCurrentItem();
-                mAnswerEditText.setText("");
-                mResultsTextView.setText("Your Answer: " + answer);
-                if (answer.toLowerCase().equals(mQas.get(index).getAnswer().toLowerCase())) {
-                    points += 1;
-                    mPointsTextView.setText(String.valueOf(points));
-                    mAdjustPointsTextView.setText("+1 points");
+                if(answeredQuestions.size()==0) {
+                    guessAnswer(index);
                 } else {
-                    points -= 1;
-                    mPointsTextView.setText(String.valueOf(points));
-                    mAdjustPointsTextView.setText("-1 points");
+                    Boolean contains = false;
+                    for(int i = 0; i < answeredQuestions.size(); i++) {
+                        if(answeredQuestions.get(i).equals(mQas.get(index).getQuestion())) {
+                            contains = true;
+                        }
+                    }
+                    if(!contains) {
+                        guessAnswer(index);
+                    } else {
+                        Toast.makeText(this, "You've already answered this question", Toast.LENGTH_LONG).show();
+                    }
                 }
+                if(answeredQuestions.size()==mQas.size()) {
+                    mResultsTextView.setText("You've correctly guessed all questions!");
+                    mAdjustPointsTextView.setText("Final score: " + points);
+                }
+
         }
 
+    }
+
+    public void guessAnswer(int index) {
+        String answer = mAnswerEditText.getText().toString();
+        mAnswerEditText.setText("");
+        mResultsTextView.setText("Your Answer: " + answer);
+        if (answer.toLowerCase().equals(mQas.get(index).getAnswer().toLowerCase())) {
+            answeredQuestions.add(mQas.get(index).getQuestion());
+            points += 1;
+            mPointsTextView.setText(String.valueOf(points));
+            mAdjustPointsTextView.setText("+1 points");
+        } else {
+            points -= 1;
+            mPointsTextView.setText(String.valueOf(points));
+            mAdjustPointsTextView.setText("-1 points");
+        }
     }
 }
