@@ -3,8 +3,6 @@
     try and incorporate timer
     add warnings for locking phone and how to use accents
     maybe prompt user for time to spend studying
-    try to incorporate fragments somehow, maybe scroll through flash cards, just for this week hopefully
-    on completion, display options to study the same deck or pick a new one
     maybe just display option to study same deck if score is not high enough
  */
 
@@ -92,36 +90,47 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         adapterViewPager = new CardPagerAdapter(getSupportFragmentManager(), mQas);
         mViewPager.setAdapter(adapterViewPager);
         mSubmitButton.setOnClickListener(this);
+        mPlayAgainButton.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.submitButton:
-
-                index = mViewPager.getCurrentItem();
-                if(answeredQuestions.size()==0) {
-                    guessAnswer(index);
-                } else {
-                    Boolean contains = false;
-                    for(int i = 0; i < answeredQuestions.size(); i++) {
-                        if(answeredQuestions.get(i).equals(mQas.get(index).getQuestion())) {
-                            contains = true;
-                        }
-                    }
-                    if(!contains) {
+                if(!won) {
+                    index = mViewPager.getCurrentItem();
+                    if(answeredQuestions.size()==0) {
                         guessAnswer(index);
                     } else {
-                        Toast.makeText(this, "You've already answered this question", Toast.LENGTH_LONG).show();
+                        Boolean contains = false;
+                        for(int i = 0; i < answeredQuestions.size(); i++) {
+                            if(answeredQuestions.get(i).equals(mQas.get(index).getQuestion())) {
+                                contains = true;
+                            }
+                        }
+                        if(!contains) {
+                            guessAnswer(index);
+                        } else {
+                            Toast.makeText(this, "You've already answered this question", Toast.LENGTH_LONG).show();
+                        }
                     }
+                    if(answeredQuestions.size()==mQas.size()) {
+                        won = true;
+                        mResultsTextView.setText("You've correctly guessed all questions!");
+                        mAdjustPointsTextView.setText("Final score: " + points);
+                        mAnswerEditText.setVisibility(View.INVISIBLE);
+                        mPlayAgainButton.setVisibility(View.VISIBLE);
+                        mSubmitButton.setText("Make a New Deck");
+                    }
+                } else {
+                    Intent intent = new Intent(StudyActivity.this, CreateDeckActivity.class);
+                    startActivity(intent);
                 }
-                if(answeredQuestions.size()==mQas.size()) {
-                    won = true;
-                    mResultsTextView.setText("You've correctly guessed all questions!");
-                    mAdjustPointsTextView.setText("Final score: " + points);
-                    mAnswerEditText.setVisibility(View.INVISIBLE);
-                    mPlayAgainButton.setVisibility(View.VISIBLE);
-                }
+
+                break;
+            case R.id.playAgainButton:
+                finish();
+                startActivity(getIntent());
 
         }
 
