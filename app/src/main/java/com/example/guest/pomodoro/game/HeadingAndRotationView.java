@@ -1,4 +1,4 @@
-package com.example.guest.pomodoro;
+package com.example.guest.pomodoro.game;
 
 import android.content.Context;
 import android.graphics.Canvas;

@@ -1,4 +1,7 @@
-package com.example.guest.pomodoro;
+package com.example.guest.pomodoro.services;
+
+import com.example.guest.pomodoro.Constants;
+import com.example.guest.pomodoro.models.QA;
 
 import org.json.JSONException;
 import org.json.JSONObject;

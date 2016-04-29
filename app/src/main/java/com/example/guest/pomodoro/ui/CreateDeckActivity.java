@@ -1,9 +1,7 @@
 /*todo:
-    error handling for empty input fields
-    make sure no two cards can have the same name
 */
 
-package com.example.guest.pomodoro;
+package com.example.guest.pomodoro.ui;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,14 +14,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.guest.pomodoro.models.QA;
+import com.example.guest.pomodoro.adapters.QAListAdapter;
+import com.example.guest.pomodoro.R;
+import com.example.guest.pomodoro.services.YandexService;
 
 import java.io.IOException;
 import java.util.ArrayList;

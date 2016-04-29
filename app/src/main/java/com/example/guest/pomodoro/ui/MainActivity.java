@@ -1,4 +1,4 @@
-package com.example.guest.pomodoro;
+package com.example.guest.pomodoro.ui;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.guest.pomodoro.R;
+import com.example.guest.pomodoro.game.GameActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

@@ -1,4 +1,4 @@
-package com.example.guest.pomodoro;
+package com.example.guest.pomodoro.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.guest.pomodoro.R;
+import com.example.guest.pomodoro.models.QA;
 
 import java.util.ArrayList;
 

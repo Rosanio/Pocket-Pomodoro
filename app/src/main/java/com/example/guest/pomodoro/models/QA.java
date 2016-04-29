@@ -1,4 +1,4 @@
-package com.example.guest.pomodoro;
+package com.example.guest.pomodoro.models;
 
 /**
  * Created by Guest on 4/29/16.
