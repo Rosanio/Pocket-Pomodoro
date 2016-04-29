@@ -101,16 +101,19 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
             case R.id.addCardButton:
                 String question = mQuestionEditText.getText().toString();
                 String answer = mAnswerEditText.getText().toString();
-                if(qas.size()==0) {
-                    QA qa = new QA(question, answer);
-                    qas.add(qa);
-                    adapter.notifyDataSetChanged();
-                } else {
-                    Boolean contains = false;
-                    for(int i = 0; i < qas.size(); i++) {
-                        Log.d("it", "works");
-                        if(!qas.get(i).getQuestion().equals(question)) {
-                            contains = true;
+                if(question.length()>0 && answer.length() > 0) {
+
+                    if(qas.size()==0) {
+                        QA qa = new QA(question, answer);
+                        qas.add(qa);
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        Boolean contains = false;
+                        for(int i = 0; i < qas.size(); i++) {
+                            Log.d("it", "works");
+                            if(!qas.get(i).getQuestion().equals(question)) {
+                                contains = true;
+                            }
                         }
                         if(!contains) {
                             QA qa = new QA(question, answer);
@@ -121,7 +124,10 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
                             Toast.makeText(CreateDeckActivity.this, "This question has already been added", Toast.LENGTH_LONG).show();
                         }
                     }
+                } else {
+                    Toast.makeText(CreateDeckActivity.this, "Please fill out both question and answer forms", Toast.LENGTH_LONG).show();
                 }
+
                 mQuestionEditText.setText("");
                 mAnswerEditText.setText("");
                 mQuestionEditText.requestFocus();
@@ -134,23 +140,32 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
             case R.id.translateQuestionButton:
                 String language = mLanguageSpinner.getSelectedItem().toString();
                 String text = mQuestionEditText.getText().toString();
-                if(qas.size() == 0) {
-                    mLoadingTextView.setText("loading...");
-                    translateText(text, language);
-                } else {
-                    Boolean contains = false;
-                    for(int i = 0; i < qas.size(); i++) {
-                        if(qas.get(i).getQuestion().equals(text)) {
-                            contains = true;
-                        }
-                    }
-                    if(!contains) {
+                if(text.length() > 0) {
+                    if(qas.size() == 0) {
                         mLoadingTextView.setText("loading...");
                         translateText(text, language);
                     } else {
-                        Toast.makeText(CreateDeckActivity.this, "This question has already been added", Toast.LENGTH_LONG).show();
+                        Boolean contains = false;
+                        for(int i = 0; i < qas.size(); i++) {
+                            if(qas.get(i).getQuestion().equals(text)) {
+                                contains = true;
+                            }
+                        }
+                        if(!contains) {
+                            mLoadingTextView.setText("loading...");
+                            translateText(text, language);
+                        } else {
+                            Toast.makeText(CreateDeckActivity.this, "This question has already been added", Toast.LENGTH_LONG).show();
+                        }
                     }
+                } else {
+                    Toast.makeText(CreateDeckActivity.this, "Please fill out question form", Toast.LENGTH_LONG).show();
                 }
+                mQuestionEditText.setText("");
+                mAnswerEditText.setText("");
+                mQuestionEditText.requestFocus();
+                break;
+
         }
     }
 
