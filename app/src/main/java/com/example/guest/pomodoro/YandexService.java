@@ -38,8 +38,8 @@ public class YandexService {
         call.enqueue(callback);
     }
 
-    public ArrayList<TranslatedText> processResults(Response response) {
-        ArrayList<TranslatedText> translatedTexts = new ArrayList<>();
+    public ArrayList<QA> processResults(ArrayList<QA> qas, String question, Response response) {
+        ArrayList<QA> newQas = qas;
 
         try {
             String jsonData = response.body().string();
@@ -47,14 +47,14 @@ public class YandexService {
                 JSONObject yandexJSON = new JSONObject(jsonData);
                 String languageTranslation = yandexJSON.getString("lang");
                 String translatedText = yandexJSON.getJSONArray("text").get(0).toString();
-                TranslatedText text  = new TranslatedText(translatedText, languageTranslation);
-                translatedTexts.add(text);
+                QA qa  = new QA(question, translatedText);
+                newQas.add(qa);
             }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return translatedTexts;
+        return newQas;
     }
 }

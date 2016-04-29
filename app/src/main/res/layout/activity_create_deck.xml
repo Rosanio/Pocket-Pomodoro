@@ -127,11 +127,11 @@
             android:layout_weight="1"
             android:id="@+id/cardListLayout">
 
-            <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/cardsListView"
-            android:layout_marginTop="15dp" />
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/recyclerView"
+                android:layout_marginTop="15dp" />
 
         </LinearLayout>
 
