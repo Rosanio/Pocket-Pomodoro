@@ -1,3 +1,8 @@
+/*todo:
+    error handling for empty input fields
+    make sure no two cards can have the same name
+*/
+
 package com.example.guest.pomodoro;
 
 import android.app.Activity;
@@ -17,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,9 +38,12 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
     @Bind(R.id.addCardButton) Button mAddCardButton;
     @Bind(R.id.cardsListView) ListView mCardsListView;
     @Bind(R.id.studyButton) Button mStudyButton;
+    @Bind(R.id.languageSpinner) Spinner mLanguageSpinner;
+    @Bind(R.id.translateQuestionButton) Button mTranslateQuestionButton;
     ArrayList<String> questions = new ArrayList<String>();
     ArrayList<String> answers = new ArrayList<String>();
     ArrayAdapter adapter;
+    String[] languages = {"Spanish", "French", "German", "Italian"};
 
     public void hideKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -66,6 +75,9 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_create_deck);
         ButterKnife.bind(this);
         setupUI(findViewById(R.id.parentContainer));
+
+        ArrayAdapter spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, languages);
+        mLanguageSpinner.setAdapter(spinnerAdapter);
 
         mAddCardButton.setOnClickListener(this);
         mStudyButton.setOnClickListener(this);

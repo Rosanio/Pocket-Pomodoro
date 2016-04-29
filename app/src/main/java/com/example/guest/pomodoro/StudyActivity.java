@@ -1,3 +1,11 @@
+/*todo:
+    wrap questions in a scroll view, possibly adjust text size based on length
+    try and incorporate timer
+    add warnings for locking phone and how to use accents
+    maybe prompt user for time to spend studying
+    try to incorporate fragments somehow, maybe scroll through flash cards, just for this week hopefully
+ */
+
 package com.example.guest.pomodoro;
 
 import android.app.Activity;
