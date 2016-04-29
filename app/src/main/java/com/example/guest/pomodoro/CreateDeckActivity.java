@@ -26,10 +26,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOError;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class CreateDeckActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -42,6 +47,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
     @Bind(R.id.translateQuestionButton) Button mTranslateQuestionButton;
     ArrayList<String> questions = new ArrayList<String>();
     ArrayList<String> answers = new ArrayList<String>();
+    ArrayList<TranslatedText> translatedTexts = new ArrayList<>();
     ArrayAdapter adapter;
     String[] languages = {"Spanish", "French", "German", "Italian"};
 
@@ -81,6 +87,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
 
         mAddCardButton.setOnClickListener(this);
         mStudyButton.setOnClickListener(this);
+        mTranslateQuestionButton.setOnClickListener(this);
 
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, questions);
         mCardsListView.setAdapter(adapter);
@@ -120,6 +127,40 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
                 intent.putExtra("questions", questions);
                 intent.putExtra("answers", answers);
                 startActivity(intent);
+                break;
+            case R.id.translateQuestionButton:
+                Log.d("it","works");
+                String language = mLanguageSpinner.getSelectedItem().toString();
+                String text = mQuestionEditText.getText().toString();
+                translateText(text, language);
         }
+    }
+
+    private void translateText(String text, String language) {
+        final YandexService yandexService = new YandexService();
+        final String question = text;
+
+        yandexService.translateText(text, language, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+                translatedTexts = yandexService.processResults(response);
+
+                CreateDeckActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String translatedText = translatedTexts.get(0).getText();
+                        questions.add(question);
+                        answers.add(translatedText);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+
+            }
+        });
     }
 }

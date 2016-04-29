@@ -1,10 +1,17 @@
 package com.example.guest.pomodoro;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Guest on 4/29/16.
@@ -29,5 +36,25 @@ public class YandexService {
 
         Call call = client.newCall(request);
         call.enqueue(callback);
+    }
+
+    public ArrayList<TranslatedText> processResults(Response response) {
+        ArrayList<TranslatedText> translatedTexts = new ArrayList<>();
+
+        try {
+            String jsonData = response.body().string();
+            if(response.isSuccessful()) {
+                JSONObject yandexJSON = new JSONObject(jsonData);
+                String languageTranslation = yandexJSON.getString("lang");
+                String translatedText = yandexJSON.getJSONArray("text").get(0).toString();
+                TranslatedText text  = new TranslatedText(translatedText, languageTranslation);
+                translatedTexts.add(text);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return translatedTexts;
     }
 }
