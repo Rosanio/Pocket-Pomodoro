@@ -12,6 +12,7 @@ package com.example.guest.pomodoro.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -23,6 +24,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.guest.pomodoro.R;
+import com.example.guest.pomodoro.adapters.CardPagerAdapter;
+import com.example.guest.pomodoro.models.QA;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -32,16 +37,11 @@ import butterknife.ButterKnife;
 
 public class StudyActivity extends AppCompatActivity implements View.OnClickListener {
 
-    @Bind(R.id.pointsTextView) TextView mPointsTextView;
-    @Bind(R.id.cardTextView) TextView mCardTextView;
-    @Bind(R.id.answerEditText) EditText mAnswerEditText;
-    @Bind(R.id.submitButton) Button mSubmitButton;
-    @Bind(R.id.resultsTextView) TextView mResultsTextView;
-    @Bind(R.id.adjustPointsTextView) TextView mAdjustPointsTextView;
-    ArrayList<String> questions;
-    ArrayList<String> answers;
-    ArrayList<String> answeredQuestions = new ArrayList<String>();
-    Random randomNumberGenerator = new Random();
+//    @Bind(R.id.pointsTextView) TextView mPointsTextView;
+    ArrayList<QA> mQas = new ArrayList<>();
+    @Bind(R.id.viewPager) ViewPager mViewPager;
+    private CardPagerAdapter adapterViewPager;
+
     int index;
     int points;
 
@@ -77,11 +77,12 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         setupUI(findViewById(R.id.parentContainer));
 
         Intent intent = getIntent();
-        questions = intent.getStringArrayListExtra("questions");
-        answers = intent.getStringArrayListExtra("answers");
-        index = randomNumberGenerator.nextInt(questions.size());
-        mCardTextView.setText(questions.get(index));
-        mSubmitButton.setOnClickListener(this);
+        mQas = Parcels.unwrap(intent.getParcelableExtra("qas"));
+        adapterViewPager = new CardPagerAdapter(getSupportFragmentManager(), mQas);
+        mViewPager.setAdapter(adapterViewPager);
+//        index = randomNumberGenerator.nextInt(questions.size());
+//        mCardTextView.setText(questions.get(index));
+//        mSubmitButton.setOnClickListener(this);
 
     }
 
@@ -89,34 +90,33 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.submitButton:
-                String answer = mAnswerEditText.getText().toString();
-                mAnswerEditText.setText("");
-                mResultsTextView.setText("Your Answer: " + answer);
-                if(answer.toLowerCase().equals(answers.get(index).toLowerCase())) {
-                    points += 1;
-                    mPointsTextView.setText(String.valueOf(points));
-                    mAdjustPointsTextView.setText("+1 points");
-                    answeredQuestions.add(questions.get(index));
-                } else {
-                    points -= 1;
-                    mPointsTextView.setText(String.valueOf(points));
-                    mAdjustPointsTextView.setText("-1 points");
-                }
-                if(answeredQuestions.size() == questions.size()) {
-                    mCardTextView.setText("You've completed this deck!");
-                    mAdjustPointsTextView.setText("Final Score: " + String.valueOf(points) + " points");
-                    mCardTextView.setTextSize(24);
-                } else {
-                    boolean foundQuestion = false;
-                    while(!foundQuestion) {
-                        index = randomNumberGenerator.nextInt(questions.size());
-                        if(!(answeredQuestions.contains(questions.get(index)))) {
-                            foundQuestion = true;
-                        }
-                    }
-                    mCardTextView.setText(questions.get(index));
-                }
+//                String answer = mAnswerEditText.getText().toString();
+//                mAnswerEditText.setText("");
+//                mResultsTextView.setText("Your Answer: " + answer);
+//                if(answer.toLowerCase().equals(answers.get(index).toLowerCase())) {
+//                    points += 1;
+//                    mPointsTextView.setText(String.valueOf(points));
+//                    mAdjustPointsTextView.setText("+1 points");
+//                    answeredQuestions.add(questions.get(index));
+//                } else {
+//                    points -= 1;
+//                    mPointsTextView.setText(String.valueOf(points));
+//                    mAdjustPointsTextView.setText("-1 points");
+//                }
+//                if(answeredQuestions.size() == questions.size()) {
+//                    mCardTextView.setText("You've completed this deck!");
+//                    mAdjustPointsTextView.setText("Final Score: " + String.valueOf(points) + " points");
+//                    mCardTextView.setTextSize(24);
+//                } else {
+//                    boolean foundQuestion = false;
+//                    while(!foundQuestion) {
+//                        index = randomNumberGenerator.nextInt(questions.size());
+//                        if(!(answeredQuestions.contains(questions.get(index)))) {
+//                            foundQuestion = true;
+//                        }
+//                    }
+//                    mCardTextView.setText(questions.get(index));
         }
-
     }
+
 }

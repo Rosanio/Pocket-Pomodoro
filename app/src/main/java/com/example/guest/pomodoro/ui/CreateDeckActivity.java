@@ -26,6 +26,8 @@ import com.example.guest.pomodoro.adapters.QAListAdapter;
 import com.example.guest.pomodoro.R;
 import com.example.guest.pomodoro.services.YandexService;
 
+import org.parceler.Parcels;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -135,7 +137,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.studyButton:
                 Intent intent = new Intent(CreateDeckActivity.this, StudyActivity.class);
-                intent.putExtra("qas", qas);
+                intent.putExtra("qas", Parcels.wrap(qas));
                 startActivity(intent);
                 break;
             case R.id.translateQuestionButton:
