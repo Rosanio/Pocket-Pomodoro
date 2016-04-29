@@ -22,13 +22,9 @@ import java.util.Random;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CardFragment extends Fragment implements View.OnClickListener {
-    @Bind(R.id.pointsTextView) TextView mPointsTextView;
+public class CardFragment extends Fragment {
+
     @Bind(R.id.cardTextView) TextView mCardTextView;
-    @Bind(R.id.answerEditText) EditText mAnswerEditText;
-    @Bind(R.id.submitButton) Button mSubmitButton;
-    @Bind(R.id.resultsTextView) TextView mResultsTextView;
-    @Bind(R.id.adjustPointsTextView) TextView mAdjustPointsTextView;
 
     int points = 0;
     private QA mQa;
@@ -52,23 +48,8 @@ public class CardFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_card, container, false);
         ButterKnife.bind(this, view);
-        mPointsTextView.setText(points+"");
         mCardTextView.setText(mQa.getQuestion());
-        mSubmitButton.setOnClickListener(this);
         return view;
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()) {
-            case R.id.submitButton:
-                String answer = mAnswerEditText.getText().toString();
-                if(answer.equals(mQa.getAnswer())) {
-                    Log.d("it", "works");
-                    points++;
-                    mPointsTextView.setText(points+"");
-                }
-        }
     }
 
 }

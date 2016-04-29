@@ -37,9 +37,20 @@ import butterknife.ButterKnife;
 
 public class StudyActivity extends AppCompatActivity implements View.OnClickListener {
 
-//    @Bind(R.id.pointsTextView) TextView mPointsTextView;
+    //    @Bind(R.id.pointsTextView) TextView mPointsTextView;
     ArrayList<QA> mQas = new ArrayList<>();
-    @Bind(R.id.viewPager) ViewPager mViewPager;
+    @Bind(R.id.pointsTextView)
+    TextView mPointsTextView;
+    @Bind(R.id.answerEditText)
+    EditText mAnswerEditText;
+    @Bind(R.id.submitButton)
+    Button mSubmitButton;
+    @Bind(R.id.resultsTextView)
+    TextView mResultsTextView;
+    @Bind(R.id.adjustPointsTextView)
+    TextView mAdjustPointsTextView;
+    @Bind(R.id.viewPager)
+    ViewPager mViewPager;
     private CardPagerAdapter adapterViewPager;
 
     int index;
@@ -51,7 +62,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void setupUI(View view) {
-        if(!(view instanceof EditText)) {
+        if (!(view instanceof EditText)) {
             view.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
                     hideKeyboard(StudyActivity.this);
@@ -61,8 +72,8 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
             });
         }
 
-        if(view instanceof ViewGroup) {
-            for(int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
                 View innerView = ((ViewGroup) view).getChildAt(i);
                 setupUI(innerView);
             }
@@ -80,43 +91,27 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         mQas = Parcels.unwrap(intent.getParcelableExtra("qas"));
         adapterViewPager = new CardPagerAdapter(getSupportFragmentManager(), mQas);
         mViewPager.setAdapter(adapterViewPager);
-//        index = randomNumberGenerator.nextInt(questions.size());
-//        mCardTextView.setText(questions.get(index));
-//        mSubmitButton.setOnClickListener(this);
-
+        mSubmitButton.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()) {
+        switch (v.getId()) {
             case R.id.submitButton:
-//                String answer = mAnswerEditText.getText().toString();
-//                mAnswerEditText.setText("");
-//                mResultsTextView.setText("Your Answer: " + answer);
-//                if(answer.toLowerCase().equals(answers.get(index).toLowerCase())) {
-//                    points += 1;
-//                    mPointsTextView.setText(String.valueOf(points));
-//                    mAdjustPointsTextView.setText("+1 points");
-//                    answeredQuestions.add(questions.get(index));
-//                } else {
-//                    points -= 1;
-//                    mPointsTextView.setText(String.valueOf(points));
-//                    mAdjustPointsTextView.setText("-1 points");
-//                }
-//                if(answeredQuestions.size() == questions.size()) {
-//                    mCardTextView.setText("You've completed this deck!");
-//                    mAdjustPointsTextView.setText("Final Score: " + String.valueOf(points) + " points");
-//                    mCardTextView.setTextSize(24);
-//                } else {
-//                    boolean foundQuestion = false;
-//                    while(!foundQuestion) {
-//                        index = randomNumberGenerator.nextInt(questions.size());
-//                        if(!(answeredQuestions.contains(questions.get(index)))) {
-//                            foundQuestion = true;
-//                        }
-//                    }
-//                    mCardTextView.setText(questions.get(index));
+                String answer = mAnswerEditText.getText().toString();
+                index = mViewPager.getCurrentItem();
+                mAnswerEditText.setText("");
+                mResultsTextView.setText("Your Answer: " + answer);
+                if (answer.toLowerCase().equals(mQas.get(index).getAnswer().toLowerCase())) {
+                    points += 1;
+                    mPointsTextView.setText(String.valueOf(points));
+                    mAdjustPointsTextView.setText("+1 points");
+                } else {
+                    points -= 1;
+                    mPointsTextView.setText(String.valueOf(points));
+                    mAdjustPointsTextView.setText("-1 points");
+                }
         }
-    }
 
+    }
 }

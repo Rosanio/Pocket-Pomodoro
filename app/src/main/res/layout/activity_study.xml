@@ -10,10 +10,27 @@
     tools:context=".ui.StudyActivity"
     android:id="@+id/parentContainer">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pointsLayout"
+        android:gravity="right">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:id="@+id/pointsTextView"
+            android:textStyle="bold"
+            android:textSize="30dp" />
+    </LinearLayout>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="200dp"
+        android:layout_below="@+id/pointsLayout">
 
         <android.support.v4.view.PagerTabStrip
             android:id="@+id/pagerHeader"
@@ -24,5 +41,67 @@
             android:paddingTop="4dp" />
 
     </android.support.v4.view.ViewPager>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/answerLayoutLayout"
+        android:layout_below="@+id/viewPager"
+        android:gravity="center"
+        android:paddingBottom="10dp">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/answerEditText"
+            android:hint="Your Answer" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/submitAnswerLayout"
+        android:layout_below="@+id/answerLayoutLayout"
+        android:gravity="center"
+        android:paddingBottom="50dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit Answer"
+            android:id="@+id/submitButton"
+            android:background="@color/colorPrimaryDark"
+            android:textSize="18dp"
+            android:textColor="@color/colorPrimaryLight"
+            android:padding="5dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/resultsLayout"
+        android:layout_below="@+id/submitAnswerLayout"
+        android:gravity="center"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/resultsTextView"
+            android:textSize="25dp"
+            android:textColor="@color/colorSecondaryText"
+            android:layout_marginBottom="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/adjustPointsTextView"
+            android:textSize="22dp" />
+    </LinearLayout>
 
 </RelativeLayout>
