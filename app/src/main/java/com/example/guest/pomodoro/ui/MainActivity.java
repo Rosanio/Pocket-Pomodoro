@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.guest.pomodoro.R;
 import com.example.guest.pomodoro.game.GameActivity;
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Bind(R.id.makeDeckButton) Button mDeckButton;
     @Bind(R.id.studyButton) Button mStudyButton;
+    @Bind(R.id.emailTextView) TextView mEmailLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mDeckButton.setOnClickListener(this);
         mStudyButton.setOnClickListener(this);
+        mEmailLabel.setOnClickListener(this);
     }
 
     @Override
@@ -39,6 +42,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("TAG", "it works");
                 Intent gameIntent = new Intent(MainActivity.this, GameActivity.class);
                 startActivity(gameIntent);
+                break;
+            case R.id.emailTextView:
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setType("*/*");
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"mmrosani@syr.edu"});
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Pocket Pomodoro Feedback");
+                startActivity(emailIntent);
         }
     }
 }
