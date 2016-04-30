@@ -113,8 +113,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
                     } else {
                         Boolean contains = false;
                         for(int i = 0; i < qas.size(); i++) {
-                            Log.d("it", "works");
-                            if(!qas.get(i).getQuestion().equals(question)) {
+                            if(qas.get(i).getQuestion().equals(question)) {
                                 contains = true;
                             }
                         }
@@ -122,7 +121,6 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
                             QA qa = new QA(question, answer);
                             qas.add(qa);
                             adapter.notifyDataSetChanged();
-                            break;
                         } else {
                             Toast.makeText(CreateDeckActivity.this, "This question has already been added", Toast.LENGTH_LONG).show();
                         }

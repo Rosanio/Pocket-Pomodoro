@@ -10,24 +10,27 @@
     android:id="@+id/parentContainer">
 
 
-
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textLayout"
-        android:gravity="center"
-        android:paddingBottom="30dp">
+        android:gravity="center">
 
-        <TextView
+        <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/cardTextView"
-            android:textSize="60sp"
-            android:text="test" />
-    </LinearLayout>
+            android:id="@+id/questionScrollView" >
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/cardTextView"
+                android:textSize="40sp"
+                android:text="test"
+                android:gravity="center" />
+        </ScrollView>
+    </LinearLayout>
 
 
 </RelativeLayout>
