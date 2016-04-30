@@ -1,5 +1,5 @@
 /*todo:
-    wrap questions in a scroll view, possibly adjust text size based on length
+    possibly adjust text size based on length
     try and incorporate timer
     add warnings for locking phone and how to use accents
     maybe prompt user for time to spend studying
@@ -45,7 +45,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     @Bind(R.id.resultsTextView) TextView mResultsTextView;
     @Bind(R.id.adjustPointsTextView) TextView mAdjustPointsTextView;
     @Bind(R.id.viewPager) ViewPager mViewPager;
-    @Bind(R.id.playAgainButton) Button mPlayAgainButton;
+    @Bind(R.id.studyAgainButton) Button mStudyAgainButton;
     private CardPagerAdapter adapterViewPager;
     private boolean won = false;
 
@@ -90,7 +90,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         adapterViewPager = new CardPagerAdapter(getSupportFragmentManager(), mQas);
         mViewPager.setAdapter(adapterViewPager);
         mSubmitButton.setOnClickListener(this);
-        mPlayAgainButton.setOnClickListener(this);
+        mStudyAgainButton.setOnClickListener(this);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                         mResultsTextView.setText("You've correctly guessed all questions!");
                         mAdjustPointsTextView.setText("Final score: " + points);
                         mAnswerEditText.setVisibility(View.INVISIBLE);
-                        mPlayAgainButton.setVisibility(View.VISIBLE);
+                        mStudyAgainButton.setVisibility(View.VISIBLE);
                         mSubmitButton.setText("Make a New Deck");
                     }
                 } else {
@@ -128,7 +128,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                 }
 
                 break;
-            case R.id.playAgainButton:
+            case R.id.studyAgainButton:
                 finish();
                 startActivity(getIntent());
 

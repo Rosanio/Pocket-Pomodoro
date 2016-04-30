@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/cardTextView"
-                android:textSize="40sp"
+                android:textSize="25sp"
                 android:text="test"
                 android:gravity="center" />
         </ScrollView>
