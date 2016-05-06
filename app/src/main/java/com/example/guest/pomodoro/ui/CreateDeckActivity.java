@@ -142,7 +142,12 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
                 mQuestionEditText.requestFocus();
                 break;
             case R.id.createDeckButton:
-                showNewDeckDialog();
+                if(cards.size() > 0) {
+                    showNewDeckDialog();
+                } else {
+                    Toast.makeText(this, "Please add at least one card", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.translateQuestionButton:
                 String language = mLanguageSpinner.getSelectedItem().toString();
@@ -210,20 +215,25 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onFinishEditDialog(String nameText, String categoryText) {
-        Deck newDeck = new Deck(nameText, categoryText);
-        Firebase newDeckRef = mDecksRef.push();
-        String deckId = newDeckRef.getKey();
-        newDeck.setId(deckId);
-        newDeckRef.setValue(newDeck);
-        Firebase deckCardsRef = new Firebase(Constants.FIREBASE_URL_CARDS).child(deckId);
-        for(int i = 0; i < cards.size(); i++) {
-            Card newCard = cards.get(i);
-            Firebase newCardRef = deckCardsRef.push();
-            String cardId = newCardRef.getKey();
-            newCard.setId(cardId);
-            newCardRef.setValue(newCard);
+        if(nameText.length()>0 && categoryText.length()>0) {
+            Deck newDeck = new Deck(nameText, categoryText);
+            Firebase newDeckRef = mDecksRef.push();
+            String deckId = newDeckRef.getKey();
+            newDeck.setId(deckId);
+            newDeckRef.setValue(newDeck);
+            Firebase deckCardsRef = new Firebase(Constants.FIREBASE_URL_CARDS).child(deckId);
+            for(int i = 0; i < cards.size(); i++) {
+                Card newCard = cards.get(i);
+                Firebase newCardRef = deckCardsRef.push();
+                String cardId = newCardRef.getKey();
+                newCard.setId(cardId);
+                newCardRef.setValue(newCard);
+            }
+            Intent intent = new Intent(CreateDeckActivity.this, MainActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(CreateDeckActivity.this, "You need to name and categorize your deck", Toast.LENGTH_SHORT).show();
         }
-        Intent intent = new Intent(CreateDeckActivity.this, MainActivity.class);
-        startActivity(intent);
+
     }
 }
