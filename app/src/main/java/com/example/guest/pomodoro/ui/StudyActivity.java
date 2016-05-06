@@ -10,6 +10,9 @@ package com.example.guest.pomodoro.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,7 +45,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class StudyActivity extends AppCompatActivity implements View.OnClickListener {
+public class StudyActivity extends AppCompatActivity implements View.OnClickListener, RateDeckFragment.RateDeckDialogListener {
 
     //    @Bind(R.id.pointsTextView) TextView mPointsTextView;
     private Deck mDeck;
@@ -59,6 +62,8 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     private CardPagerAdapter adapterViewPager;
     private boolean won = false;
     private Firebase mDeckCardsRef;
+    private SharedPreferences mSharedPreferences;
+    private String mUId;
 
     int index;
     int points;
@@ -95,6 +100,9 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_study);
         ButterKnife.bind(this);
         setupUI(findViewById(R.id.parentContainer));
+
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mUId = mSharedPreferences.getString(Constants.KEY_UID, null);
 
         Intent intent = getIntent();
         mDeck = Parcels.unwrap(intent.getParcelableExtra("deck"));
@@ -170,10 +178,15 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(getIntent());
                 break;
             case R.id.showAnswerButton:
-                index = mViewPager.getCurrentItem();
-                Toast.makeText(this, mCards.get(index).getAnswer(), Toast.LENGTH_LONG).show();
-                points -= 2;
-                mPointsTextView.setText(String.valueOf(points));
+                if(!won) {
+                    index = mViewPager.getCurrentItem();
+                    Toast.makeText(this, mCards.get(index).getAnswer(), Toast.LENGTH_LONG).show();
+                    points -= 2;
+                    mPointsTextView.setText(String.valueOf(points));
+                } else {
+                    showRateDeckDialog();
+                }
+
         }
 
     }
@@ -192,5 +205,18 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
             mPointsTextView.setText(String.valueOf(points));
             mAdjustPointsTextView.setText("-1 points");
         }
+    }
+
+    private void showRateDeckDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        RateDeckFragment rateDeckFragment = RateDeckFragment.newInstance("Rate this Deck:");
+        rateDeckFragment.show(fm, "fragment_rate_deck");
+    }
+
+    @Override
+    public void onFinishEditDialog(float rating) {
+        Firebase ratingRef = new Firebase(Constants.FIREBASE_ROOT_URL + "/rating/" + mUId + "/" + mDeck.getId());
+        ratingRef.setValue(rating);
+        Toast.makeText(StudyActivity.this, "You rated " + mDeck.getName() + " at " + rating + " stars.", Toast.LENGTH_SHORT).show();
     }
 }
