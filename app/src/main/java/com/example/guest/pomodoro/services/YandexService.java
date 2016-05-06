@@ -1,7 +1,7 @@
 package com.example.guest.pomodoro.services;
 
 import com.example.guest.pomodoro.Constants;
-import com.example.guest.pomodoro.models.QA;
+import com.example.guest.pomodoro.models.Card;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,8 +41,8 @@ public class YandexService {
         call.enqueue(callback);
     }
 
-    public ArrayList<QA> processResults(ArrayList<QA> qas, String question, Response response) {
-        ArrayList<QA> newQas = qas;
+    public ArrayList<Card> processResults(ArrayList<Card> cards, String question, Response response) {
+        ArrayList<Card> newCards = cards;
 
         try {
             String jsonData = response.body().string();
@@ -50,14 +50,14 @@ public class YandexService {
                 JSONObject yandexJSON = new JSONObject(jsonData);
                 String languageTranslation = yandexJSON.getString("lang");
                 String translatedText = yandexJSON.getJSONArray("text").get(0).toString();
-                QA qa  = new QA(question, translatedText);
-                newQas.add(qa);
+                Card card = new Card(question, translatedText);
+                newCards.add(card);
             }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return newQas;
+        return newCards;
     }
 }

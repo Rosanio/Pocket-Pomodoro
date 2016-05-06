@@ -5,11 +5,11 @@ package com.example.guest.pomodoro.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +21,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.guest.pomodoro.models.QA;
+import com.example.guest.pomodoro.Constants;
+import com.example.guest.pomodoro.models.Card;
 import com.example.guest.pomodoro.adapters.QAListAdapter;
 import com.example.guest.pomodoro.R;
+import com.example.guest.pomodoro.models.Deck;
 import com.example.guest.pomodoro.services.YandexService;
+import com.firebase.client.Firebase;
 
 import org.parceler.Parcels;
 
@@ -37,21 +40,23 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class CreateDeckActivity extends AppCompatActivity implements View.OnClickListener {
+public class CreateDeckActivity extends AppCompatActivity implements View.OnClickListener, AddDeckFragment.AddDeckDialogListener {
 
     @Bind(R.id.questionEditText) EditText mQuestionEditText;
     @Bind(R.id.answerEditText) EditText mAnswerEditText;
     @Bind(R.id.addCardButton) Button mAddCardButton;
     @Bind(R.id.recyclerView) RecyclerView mQaRecyclerView;
-    @Bind(R.id.studyButton) Button mStudyButton;
+    @Bind(R.id.createDeckButton) Button mCreateDeckButton;
     @Bind(R.id.languageSpinner) Spinner mLanguageSpinner;
     @Bind(R.id.translateQuestionButton) Button mTranslateQuestionButton;
     @Bind(R.id.loadingTextView) TextView mLoadingTextView;
     ArrayList<String> questions = new ArrayList<String>();
     ArrayList<String> answers = new ArrayList<String>();
-    ArrayList<QA> qas = new ArrayList<>();
+    ArrayList<Card> cards = new ArrayList<>();
     QAListAdapter adapter;
     String[] languages = {"Spanish", "French", "German", "Italian"};
+    private Firebase mDecksRef;
+    private Firebase mCardsRef;
 
     public void hideKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -84,14 +89,17 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
         ButterKnife.bind(this);
         setupUI(findViewById(R.id.parentContainer));
 
+        mDecksRef = new Firebase(Constants.FIREBASE_URL_DECKS);
+        mCardsRef = new Firebase(Constants.FIREBASE_URL_CARDS);
+
         ArrayAdapter spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, languages);
         mLanguageSpinner.setAdapter(spinnerAdapter);
 
         mAddCardButton.setOnClickListener(this);
-        mStudyButton.setOnClickListener(this);
+        mCreateDeckButton.setOnClickListener(this);
         mTranslateQuestionButton.setOnClickListener(this);
 
-        adapter = new QAListAdapter(this, qas);
+        adapter = new QAListAdapter(this, cards);
         mQaRecyclerView.setAdapter(adapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(CreateDeckActivity.this);
         mQaRecyclerView.setLayoutManager(layoutManager);
@@ -106,20 +114,20 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
                 String answer = mAnswerEditText.getText().toString();
                 if(question.length()>0 && answer.length() > 0) {
 
-                    if(qas.size()==0) {
-                        QA qa = new QA(question, answer);
-                        qas.add(qa);
+                    if(cards.size()==0) {
+                        Card card = new Card(question, answer);
+                        cards.add(card);
                         adapter.notifyDataSetChanged();
                     } else {
                         Boolean contains = false;
-                        for(int i = 0; i < qas.size(); i++) {
-                            if(qas.get(i).getQuestion().equals(question)) {
+                        for(int i = 0; i < cards.size(); i++) {
+                            if(cards.get(i).getQuestion().equals(question)) {
                                 contains = true;
                             }
                         }
                         if(!contains) {
-                            QA qa = new QA(question, answer);
-                            qas.add(qa);
+                            Card card = new Card(question, answer);
+                            cards.add(card);
                             adapter.notifyDataSetChanged();
                         } else {
                             Toast.makeText(CreateDeckActivity.this, "This question has already been added", Toast.LENGTH_LONG).show();
@@ -133,22 +141,20 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
                 mAnswerEditText.setText("");
                 mQuestionEditText.requestFocus();
                 break;
-            case R.id.studyButton:
-                Intent intent = new Intent(CreateDeckActivity.this, StudyActivity.class);
-                intent.putExtra("qas", Parcels.wrap(qas));
-                startActivity(intent);
+            case R.id.createDeckButton:
+                showNewDeckDialog();
                 break;
             case R.id.translateQuestionButton:
                 String language = mLanguageSpinner.getSelectedItem().toString();
                 String text = mQuestionEditText.getText().toString();
                 if(text.length() > 0) {
-                    if(qas.size() == 0) {
+                    if(cards.size() == 0) {
                         mLoadingTextView.setText("translating...");
                         translateText(text, language);
                     } else {
                         Boolean contains = false;
-                        for(int i = 0; i < qas.size(); i++) {
-                            if(qas.get(i).getQuestion().equals(text)) {
+                        for(int i = 0; i < cards.size(); i++) {
+                            if(cards.get(i).getQuestion().equals(text)) {
                                 contains = true;
                             }
                         }
@@ -182,7 +188,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onResponse(Call call, Response response) {
-                qas = yandexService.processResults(qas, question, response);
+                cards = yandexService.processResults(cards, question, response);
 
                 CreateDeckActivity.this.runOnUiThread(new Runnable() {
                     @Override
@@ -194,5 +200,30 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
 
             }
         });
+    }
+
+    private void showNewDeckDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        AddDeckFragment addDeckDialogFragment = AddDeckFragment.newInstance("Add New Deck:");
+        addDeckDialogFragment.show(fm, "fragment_add_deck");
+    }
+
+    @Override
+    public void onFinishEditDialog(String nameText, String categoryText) {
+        Deck newDeck = new Deck(nameText, categoryText);
+        Firebase newDeckRef = mDecksRef.push();
+        String deckId = newDeckRef.getKey();
+        newDeck.setId(deckId);
+        newDeckRef.setValue(newDeck);
+        Firebase deckCardsRef = new Firebase(Constants.FIREBASE_URL_CARDS).child(deckId);
+        for(int i = 0; i < cards.size(); i++) {
+            Card newCard = cards.get(i);
+            Firebase newCardRef = deckCardsRef.push();
+            String cardId = newCardRef.getKey();
+            newCard.setId(cardId);
+            newCardRef.setValue(newCard);
+        }
+        Intent intent = new Intent(CreateDeckActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }

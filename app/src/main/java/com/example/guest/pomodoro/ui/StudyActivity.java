@@ -24,12 +24,11 @@ import android.widget.Toast;
 
 import com.example.guest.pomodoro.R;
 import com.example.guest.pomodoro.adapters.CardPagerAdapter;
-import com.example.guest.pomodoro.models.QA;
+import com.example.guest.pomodoro.models.Card;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -37,7 +36,7 @@ import butterknife.ButterKnife;
 public class StudyActivity extends AppCompatActivity implements View.OnClickListener {
 
     //    @Bind(R.id.pointsTextView) TextView mPointsTextView;
-    ArrayList<QA> mQas = new ArrayList<>();
+    ArrayList<Card> mCards = new ArrayList<>();
     ArrayList<String> answeredQuestions = new ArrayList<>();
     @Bind(R.id.pointsTextView) TextView mPointsTextView;
     @Bind(R.id.answerEditText) EditText mAnswerEditText;
@@ -86,8 +85,8 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         setupUI(findViewById(R.id.parentContainer));
 
         Intent intent = getIntent();
-        mQas = Parcels.unwrap(intent.getParcelableExtra("qas"));
-        adapterViewPager = new CardPagerAdapter(getSupportFragmentManager(), mQas);
+        mCards = Parcels.unwrap(intent.getParcelableExtra("cards"));
+        adapterViewPager = new CardPagerAdapter(getSupportFragmentManager(), mCards);
         mViewPager.setAdapter(adapterViewPager);
         mSubmitButton.setOnClickListener(this);
         mStudyAgainButton.setOnClickListener(this);
@@ -104,7 +103,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                     } else {
                         Boolean contains = false;
                         for(int i = 0; i < answeredQuestions.size(); i++) {
-                            if(answeredQuestions.get(i).equals(mQas.get(index).getQuestion())) {
+                            if(answeredQuestions.get(i).equals(mCards.get(index).getQuestion())) {
                                 contains = true;
                             }
                         }
@@ -114,7 +113,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                             Toast.makeText(this, "You've already answered this question", Toast.LENGTH_LONG).show();
                         }
                     }
-                    if(answeredQuestions.size()==mQas.size()) {
+                    if(answeredQuestions.size()== mCards.size()) {
                         won = true;
                         mResultsTextView.setText("You've correctly guessed all questions!");
                         mAdjustPointsTextView.setText("Final score: " + points);
@@ -140,8 +139,8 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         String answer = mAnswerEditText.getText().toString();
         mAnswerEditText.setText("");
         mResultsTextView.setText("Your Answer: " + answer);
-        if (answer.toLowerCase().equals(mQas.get(index).getAnswer().toLowerCase())) {
-            answeredQuestions.add(mQas.get(index).getQuestion());
+        if (answer.toLowerCase().equals(mCards.get(index).getAnswer().toLowerCase())) {
+            answeredQuestions.add(mCards.get(index).getQuestion());
             points += 1;
             mPointsTextView.setText(String.valueOf(points));
             mAdjustPointsTextView.setText("+1 points");

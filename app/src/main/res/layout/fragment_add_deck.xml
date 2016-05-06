@@ -1,0 +1,25 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/deckNameEditText"
+        android:hint="Deck Name"
+        android:imeOptions="actionNext"
+        android:inputType="text"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/deckCategoryEditText"
+        android:layout_below="@+id/deckNameEditText"
+        android:hint="Deck Category"
+        android:imeOptions="actionDone"
+        android:inputType="text"/>
+</RelativeLayout>
+

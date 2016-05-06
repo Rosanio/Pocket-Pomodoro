@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.guest.pomodoro.R;
-import com.example.guest.pomodoro.models.QA;
+import com.example.guest.pomodoro.models.Card;
 
 import java.util.ArrayList;
 
@@ -16,12 +16,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class QAListAdapter extends RecyclerView.Adapter<QAListAdapter.QAViewHolder> {
-    private ArrayList<QA> mQAs = new ArrayList<>();
+    private ArrayList<Card> mCards = new ArrayList<>();
     private Context mContext;
 
-    public QAListAdapter(Context context, ArrayList<QA> qas) {
+    public QAListAdapter(Context context, ArrayList<Card> cards) {
         mContext = context;
-        mQAs = qas;
+        mCards = cards;
     }
 
     @Override
@@ -33,12 +33,12 @@ public class QAListAdapter extends RecyclerView.Adapter<QAListAdapter.QAViewHold
 
     @Override
     public void onBindViewHolder(QAListAdapter.QAViewHolder holder, int position) {
-        holder.bindQa(mQAs.get(position));
+        holder.bindQa(mCards.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mQAs.size();
+        return mCards.size();
     }
 
     public class QAViewHolder extends RecyclerView.ViewHolder {
@@ -52,9 +52,9 @@ public class QAListAdapter extends RecyclerView.Adapter<QAListAdapter.QAViewHold
             mContext = itemView.getContext();
         }
 
-        public void bindQa(QA qa) {
-            mQuestionTextView.setText(qa.getQuestion());
-            mAnswerTextView.setText(qa.getAnswer());
+        public void bindQa(Card card) {
+            mQuestionTextView.setText(card.getQuestion());
+            mAnswerTextView.setText(card.getAnswer());
         }
     }
 }

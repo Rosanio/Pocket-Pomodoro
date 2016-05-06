@@ -1,3 +1,16 @@
+/*todo:
+    modify login activity to automatically authenticate when enter is pressed
+    same for sign up activity
+    allow users to create and save a deck of cards (consider data structure before doing this part)
+    allow users to select from a list of decks
+    allow users to rate a deck
+    possibly order decks by top rated (by default)
+    allow users to search for a deck of cards
+    possibly categorize decks of cards
+    implement a function to briefly display the answer to a question
+    possibly incorporate timer
+ */
+
 package com.example.guest.pomodoro.ui;
 
 import android.content.Intent;
