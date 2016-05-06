@@ -12,7 +12,7 @@ public class Deck {
 
     String name;
     String category;
-    double rating;
+    float rating;
     Date date;
     String id;
 
@@ -36,7 +36,7 @@ public class Deck {
         return category;
     }
 
-    public double getRating() {
+    public float getRating() {
         return rating;
     }
 
@@ -52,7 +52,7 @@ public class Deck {
         this.id = id;
     }
 
-    public void setRating(double rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 

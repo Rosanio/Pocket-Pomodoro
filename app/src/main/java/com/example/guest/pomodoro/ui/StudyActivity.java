@@ -62,6 +62,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     private CardPagerAdapter adapterViewPager;
     private boolean won = false;
     private Firebase mDeckCardsRef;
+    private Firebase mDeckRatingRef;
     private SharedPreferences mSharedPreferences;
     private String mUId;
 
@@ -132,6 +133,33 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
             }
         });
+        mDeckRatingRef = new Firebase(Constants.FIREBASE_ROOT_URL + "/rating/" + mDeck.getId());
+        mDeckRatingRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Map ratingsMap = (Map) snapshot.getValue();
+                if(ratingsMap != null) {
+                    List ratingsList = new ArrayList<>(ratingsMap.values());
+                    float totalRating = 0;
+                    for(int i = 0; i < ratingsList.size(); i++) {
+                        double ratingDouble = (double) ratingsList.get(i);
+                        float rating = (float) ratingDouble;
+                        totalRating += rating;
+                    }
+                    float averageRating = totalRating/ratingsList.size();
+                    mDeck.setRating(averageRating);
+                    Firebase deckRatingRef = new Firebase(Constants.FIREBASE_URL_DECKS).child(mDeck.getId()).child("rating");
+                    deckRatingRef.setValue(averageRating);
+                    Log.d("rating", mDeck.getRating()+"");
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError error) {
+
+            }
+        });
+
 
         mSubmitButton.setOnClickListener(this);
         mStudyAgainButton.setOnClickListener(this);
@@ -215,8 +243,8 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onFinishEditDialog(float rating) {
-        Firebase ratingRef = new Firebase(Constants.FIREBASE_ROOT_URL + "/rating/" + mUId + "/" + mDeck.getId());
-        ratingRef.setValue(rating);
+        Firebase deckUsersRatingRef = new Firebase(mDeckRatingRef + "/" + mUId);
+        deckUsersRatingRef.setValue(rating);
         Toast.makeText(StudyActivity.this, "You rated " + mDeck.getName() + " at " + rating + " stars.", Toast.LENGTH_SHORT).show();
     }
 }
