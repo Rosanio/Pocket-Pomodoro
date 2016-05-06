@@ -31,25 +31,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/nameEditText"
-            android:hint="Name" />
+            android:hint="Name"
+            android:inputType="textPersonName" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/emailEditText"
-            android:hint="Email" />
+            android:hint="Email"
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/passwordEditText"
-            android:hint="Password" />
+            android:hint="Password"
+            android:inputType="textPassword" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/confirmPasswordEditText"
-            android:hint="Confirm Password" />
+            android:hint="Confirm Password"
+            android:inputType="textPassword" />
     </LinearLayout>
 
     <Button
