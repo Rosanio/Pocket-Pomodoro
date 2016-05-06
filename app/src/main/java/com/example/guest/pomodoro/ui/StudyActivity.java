@@ -133,7 +133,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
             }
         });
-        mDeckRatingRef = new Firebase(Constants.FIREBASE_ROOT_URL + "/rating/" + mDeck.getId());
+        mDeckRatingRef = new Firebase(Constants.FIREBASE_ROOT_URL + "/ratings/" + mDeck.getId());
         mDeckRatingRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {

@@ -1,12 +1,14 @@
 /*todo:
     modify login activity to automatically authenticate when enter is pressed
     same for sign up activity
-    allow users to rate a deck
     possibly order decks by top rated (by default)
     allow users to search for a deck of cards
     possibly categorize decks of cards
     implement a function to briefly display the answer to a question
     possibly incorporate timer
+    when enter key is pressed on study activity, automatically submit answer
+    look into possibility of removing fragments from pageradapter as questions are answered
+    have keyboard push up all other elements of page
  */
 
 package com.example.guest.pomodoro.ui;
