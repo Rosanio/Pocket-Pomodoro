@@ -31,6 +31,7 @@ import com.firebase.client.Firebase;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -218,6 +219,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
             Firebase newDeckRef = mDecksRef.push();
             String deckId = newDeckRef.getKey();
             newDeck.setId(deckId);
+            newDeck.setDate(new Date());
             newDeckRef.setValue(newDeck);
             Firebase deckCardsRef = new Firebase(Constants.FIREBASE_URL_CARDS).child(deckId);
             for(int i = 0; i < cards.size(); i++) {

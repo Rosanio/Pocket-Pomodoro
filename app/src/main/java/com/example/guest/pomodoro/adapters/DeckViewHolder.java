@@ -1,12 +1,16 @@
 package com.example.guest.pomodoro.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.guest.pomodoro.R;
 import com.example.guest.pomodoro.models.Deck;
+import com.example.guest.pomodoro.ui.StudyActivity;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -35,7 +39,9 @@ public class DeckViewHolder extends RecyclerView.ViewHolder {
            @Override
             public void onClick(View v) {
                int itemPosition = getLayoutPosition();
-               //navigate to study activity
+               Intent intent = new Intent(mContext, StudyActivity.class);
+               intent.putExtra("deck", Parcels.wrap(mDecks.get(itemPosition)));
+               mContext.startActivity(intent);
            }
         });
     }

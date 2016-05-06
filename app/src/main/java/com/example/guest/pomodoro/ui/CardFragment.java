@@ -34,7 +34,7 @@ public class CardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
-        mCard = Parcels.unwrap(getArguments().getParcelable("qa"));
+        mCard = Parcels.unwrap(getArguments().getParcelable("card"));
     }
 
     @Override

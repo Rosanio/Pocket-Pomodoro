@@ -1,10 +1,13 @@
 package com.example.guest.pomodoro.models;
 
+import org.parceler.Parcel;
+
 import java.util.Date;
 
 /**
  * Created by Guest on 5/6/16.
  */
+@Parcel
 public class Deck {
 
     String name;
@@ -18,7 +21,6 @@ public class Deck {
     public Deck(String name, String category) {
         this.name = name;
         this.category = category;
-        this.date = new Date();
         this.rating = 0;
     }
 
@@ -40,6 +42,10 @@ public class Deck {
 
     public Date getDate() {
         return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public void setId(String id) {

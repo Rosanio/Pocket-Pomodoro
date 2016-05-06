@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +23,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.guest.pomodoro.Constants;
 import com.example.guest.pomodoro.R;
 import com.example.guest.pomodoro.adapters.CardPagerAdapter;
 import com.example.guest.pomodoro.models.Card;
+import com.example.guest.pomodoro.models.Deck;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -36,6 +45,7 @@ import butterknife.ButterKnife;
 public class StudyActivity extends AppCompatActivity implements View.OnClickListener {
 
     //    @Bind(R.id.pointsTextView) TextView mPointsTextView;
+    private Deck mDeck;
     ArrayList<Card> mCards = new ArrayList<>();
     ArrayList<String> answeredQuestions = new ArrayList<>();
     @Bind(R.id.pointsTextView) TextView mPointsTextView;
@@ -47,6 +57,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     @Bind(R.id.studyAgainButton) Button mStudyAgainButton;
     private CardPagerAdapter adapterViewPager;
     private boolean won = false;
+    private Firebase mDeckCardsRef;
 
     int index;
     int points;
@@ -85,9 +96,34 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         setupUI(findViewById(R.id.parentContainer));
 
         Intent intent = getIntent();
-        mCards = Parcels.unwrap(intent.getParcelableExtra("cards"));
-        adapterViewPager = new CardPagerAdapter(getSupportFragmentManager(), mCards);
-        mViewPager.setAdapter(adapterViewPager);
+        mDeck = Parcels.unwrap(intent.getParcelableExtra("deck"));
+        mDeckCardsRef = new Firebase(Constants.FIREBASE_URL_CARDS).child(mDeck.getId());
+        mDeckCardsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Map cardsMap = (Map) snapshot.getValue();
+
+                if(cardsMap != null) {
+                    List cardsObjectList = new ArrayList<>(cardsMap.values());
+                    for(int i = 0; i < cardsObjectList.size(); i++) {
+                        Map thisCard = (Map) cardsObjectList.get(i);
+                        String cardQuestion = thisCard.get("question").toString();
+                        String cardAnswer = thisCard.get("answer").toString();
+                        Card newCard = new Card(cardQuestion, cardAnswer);
+                        mCards.add(newCard);
+                    }
+
+                    adapterViewPager = new CardPagerAdapter(getSupportFragmentManager(), mCards);
+                    mViewPager.setAdapter(adapterViewPager);
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
         mSubmitButton.setOnClickListener(this);
         mStudyAgainButton.setOnClickListener(this);
     }
