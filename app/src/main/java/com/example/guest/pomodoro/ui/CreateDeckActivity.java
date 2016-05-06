@@ -23,13 +23,11 @@ import android.widget.Toast;
 
 import com.example.guest.pomodoro.Constants;
 import com.example.guest.pomodoro.models.Card;
-import com.example.guest.pomodoro.adapters.QAListAdapter;
+import com.example.guest.pomodoro.adapters.CardListAdapter;
 import com.example.guest.pomodoro.R;
 import com.example.guest.pomodoro.models.Deck;
 import com.example.guest.pomodoro.services.YandexService;
 import com.firebase.client.Firebase;
-
-import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,7 +51,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
     ArrayList<String> questions = new ArrayList<String>();
     ArrayList<String> answers = new ArrayList<String>();
     ArrayList<Card> cards = new ArrayList<>();
-    QAListAdapter adapter;
+    CardListAdapter adapter;
     String[] languages = {"Spanish", "French", "German", "Italian"};
     private Firebase mDecksRef;
     private Firebase mCardsRef;
@@ -99,7 +97,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
         mCreateDeckButton.setOnClickListener(this);
         mTranslateQuestionButton.setOnClickListener(this);
 
-        adapter = new QAListAdapter(this, cards);
+        adapter = new CardListAdapter(this, cards);
         mQaRecyclerView.setAdapter(adapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(CreateDeckActivity.this);
         mQaRecyclerView.setLayoutManager(layoutManager);

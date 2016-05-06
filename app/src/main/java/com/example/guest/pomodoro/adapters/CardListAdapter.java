@@ -15,24 +15,24 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class QAListAdapter extends RecyclerView.Adapter<QAListAdapter.QAViewHolder> {
+public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.QAViewHolder> {
     private ArrayList<Card> mCards = new ArrayList<>();
     private Context mContext;
 
-    public QAListAdapter(Context context, ArrayList<Card> cards) {
+    public CardListAdapter(Context context, ArrayList<Card> cards) {
         mContext = context;
         mCards = cards;
     }
 
     @Override
-    public QAListAdapter.QAViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CardListAdapter.QAViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.qa_list_item, parent, false);
         QAViewHolder viewHolder = new QAViewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(QAListAdapter.QAViewHolder holder, int position) {
+    public void onBindViewHolder(CardListAdapter.QAViewHolder holder, int position) {
         holder.bindQa(mCards.get(position));
     }
 

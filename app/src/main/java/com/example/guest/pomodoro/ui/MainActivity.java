@@ -1,7 +1,6 @@
 /*todo:
     modify login activity to automatically authenticate when enter is pressed
     same for sign up activity
-    allow users to create and save a deck of cards (consider data structure before doing this part)
     allow users to select from a list of decks
     allow users to rate a deck
     possibly order decks by top rated (by default)
@@ -61,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.studyButton:
                 Log.d("TAG", "it works");
-                Intent gameIntent = new Intent(MainActivity.this, GameActivity.class);
+                Intent gameIntent = new Intent(MainActivity.this, SelectDeckActivity.class);
                 startActivity(gameIntent);
                 break;
             case R.id.emailTextView:
