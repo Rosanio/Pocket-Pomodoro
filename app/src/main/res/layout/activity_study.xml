@@ -57,9 +57,21 @@
             android:text="Submit Answer"
             android:id="@+id/submitButton"
             android:background="@color/colorPrimaryDark"
-            android:textSize="18dp"
+            android:textSize="17sp"
             android:textColor="@color/colorPrimaryLight"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:layout_weight="0.5" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show Answer"
+            android:id="@+id/showAnswerButton"
+            android:layout_weight="0.5"
+            android:background="@color/colorPrimaryLight"
+            android:padding="5dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="17sp" />
 
     </LinearLayout>
 
@@ -102,7 +114,9 @@
             android:id="@+id/studyAgainButton"
             android:background="@color/colorAccent"
             android:textColor="@color/colorPrimaryLight"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:padding="5dp"
+            android:layout_marginBottom="15dp" />
     </LinearLayout>
 
     <LinearLayout

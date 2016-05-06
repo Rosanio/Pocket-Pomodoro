@@ -55,6 +55,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     @Bind(R.id.adjustPointsTextView) TextView mAdjustPointsTextView;
     @Bind(R.id.viewPager) ViewPager mViewPager;
     @Bind(R.id.studyAgainButton) Button mStudyAgainButton;
+    @Bind(R.id.showAnswerButton) Button mShowAnswerButton;
     private CardPagerAdapter adapterViewPager;
     private boolean won = false;
     private Firebase mDeckCardsRef;
@@ -126,6 +127,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
         mSubmitButton.setOnClickListener(this);
         mStudyAgainButton.setOnClickListener(this);
+        mShowAnswerButton.setOnClickListener(this);
     }
 
     @Override
@@ -166,7 +168,12 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
             case R.id.studyAgainButton:
                 finish();
                 startActivity(getIntent());
-
+                break;
+            case R.id.showAnswerButton:
+                index = mViewPager.getCurrentItem();
+                Toast.makeText(this, mCards.get(index).getAnswer(), Toast.LENGTH_LONG).show();
+                points -= 2;
+                mPointsTextView.setText(String.valueOf(points));
         }
 
     }
@@ -177,9 +184,9 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         mResultsTextView.setText("Your Answer: " + answer);
         if (answer.toLowerCase().equals(mCards.get(index).getAnswer().toLowerCase())) {
             answeredQuestions.add(mCards.get(index).getQuestion());
-            points += 1;
+            points += 2;
             mPointsTextView.setText(String.valueOf(points));
-            mAdjustPointsTextView.setText("+1 points");
+            mAdjustPointsTextView.setText("+2 points");
         } else {
             points -= 1;
             mPointsTextView.setText(String.valueOf(points));

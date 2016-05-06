@@ -3,6 +3,7 @@ package com.example.guest.pomodoro.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
@@ -65,6 +66,10 @@ public class DeckViewHolder extends RecyclerView.ViewHolder {
         }
         if(rating >= 4.50) {
             ratingString += starString;
+        }
+        if(rating == 0) {
+            ratingString = "Not yet rated";
+            mRatingTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         }
         mRatingTextView.setText(ratingString);
     }
