@@ -215,6 +215,7 @@ public class CreateDeckActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onFinishEditDialog(String nameText, String categoryText) {
         if(nameText.length()>0 && categoryText.length()>0) {
+            nameText = Character.toUpperCase(nameText.charAt(0)) + nameText.substring(1);
             Deck newDeck = new Deck(nameText, categoryText);
             Firebase newDeckRef = mDecksRef.push();
             String deckId = newDeckRef.getKey();
