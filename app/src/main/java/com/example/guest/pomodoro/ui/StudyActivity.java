@@ -193,10 +193,11 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                         mAdjustPointsTextView.setText("Final score: " + points);
                         mAnswerEditText.setVisibility(View.INVISIBLE);
                         mStudyAgainButton.setVisibility(View.VISIBLE);
-                        mSubmitButton.setText("Make a New Deck");
+                        mSubmitButton.setText("Study a New Deck");
+                        mShowAnswerButton.setText("Rate this Deck");
                     }
                 } else {
-                    Intent intent = new Intent(StudyActivity.this, CreateDeckActivity.class);
+                    Intent intent = new Intent(StudyActivity.this, SelectDeckActivity.class);
                     startActivity(intent);
                 }
 
