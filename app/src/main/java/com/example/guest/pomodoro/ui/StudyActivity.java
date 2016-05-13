@@ -45,6 +45,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -70,6 +71,8 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     private SharedPreferences mSharedPreferences;
     private String mUId;
     private Card mCard;
+    private Random randomNumberGenerator;
+    private int deckSize;
 
     int index;
     int points;
@@ -102,12 +105,12 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("its in", "onCreate study");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_study);
-        Log.d("it", "works");
         ButterKnife.bind(this);
         setupUI(findViewById(R.id.parentContainer));
+
+        randomNumberGenerator = new Random();
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mUId = mSharedPreferences.getString(Constants.KEY_UID, null);
@@ -129,7 +132,9 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                         Card newCard = new Card(cardQuestion, cardAnswer);
                         mCards.add(newCard);
                     }
-                    createCardFragment(0);
+                    deckSize = mCards.size();
+                    int position = randomNumberGenerator.nextInt(mCards.size());
+                    createCardFragment(position);
                 }
             }
 
@@ -172,7 +177,6 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
     private void createCardFragment(int position) {
         mCard = mCards.get(position);
-        Log.d("create card fragment", mCard.getQuestion());
         CardFragment cardFragment = CardFragment.newInstance(mCard);
         FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.cardContainer, cardFragment);
@@ -184,22 +188,8 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.submitButton:
                 if(!won) {
-                    if(answeredQuestions.size()==0) {
-                        guessAnswer(mCard);
-                    } else {
-                        Boolean contains = false;
-                        for(int i = 0; i < answeredQuestions.size(); i++) {
-                            if(answeredQuestions.get(i).equals(mCards.get(index).getQuestion())) {
-                                contains = true;
-                            }
-                        }
-                        if(!contains) {
-                            guessAnswer(mCard);
-                        } else {
-                            Toast.makeText(this, "You've already answered this question", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                    if(answeredQuestions.size()== mCards.size()) {
+                    guessAnswer(mCard);
+                    if(answeredQuestions.size()== deckSize) {
                         won = true;
                         mResultsTextView.setText("You've correctly guessed all questions!");
                         mAdjustPointsTextView.setText("Final score: " + points);
@@ -207,6 +197,10 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                         mStudyAgainButton.setVisibility(View.VISIBLE);
                         mSubmitButton.setText("Study a New Deck");
                         mShowAnswerButton.setText("Rate this Deck");
+                    } else {
+                        mCards.remove(mCard);
+                        int position = randomNumberGenerator.nextInt(mCards.size());
+                        createCardFragment(position);
                     }
                 } else {
                     Intent intent = new Intent(StudyActivity.this, SelectDeckActivity.class);
@@ -237,6 +231,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         mResultsTextView.setText("Your Answer: " + answer);
         if (answer.toLowerCase().equals(card.getAnswer().toLowerCase())) {
             answeredQuestions.add(card.getQuestion());
+            Log.d(answeredQuestions.size()+"", mCards.size()+"");
             points += 2;
             mPointsTextView.setText(String.valueOf(points));
             mAdjustPointsTextView.setText("+2 points");

@@ -29,7 +29,6 @@ public class CardFragment extends Fragment {
         Bundle args = new Bundle();
         args.putParcelable("card", Parcels.wrap(card));
         cardFragment.setArguments(args);
-        Log.d("created", "card fragment");
         return cardFragment;
     }
 
@@ -42,12 +41,9 @@ public class CardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("onCreateView", "firing");
         View view = inflater.inflate(R.layout.fragment_card, container, false);
-        Log.d("view", "inflated");
         ButterKnife.bind(this, view);
         mCardTextView.setText(mCard.getQuestion());
-        Log.d("text", mCardTextView.getText().toString());
         return view;
     }
 
