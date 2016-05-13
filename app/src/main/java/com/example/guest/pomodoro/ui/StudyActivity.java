@@ -22,9 +22,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +62,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     @Bind(R.id.adjustPointsTextView) TextView mAdjustPointsTextView;
     @Bind(R.id.studyAgainButton) Button mStudyAgainButton;
     @Bind(R.id.showAnswerButton) Button mShowAnswerButton;
+    @Bind(R.id.cardContainer) FrameLayout mCardContainer;
     private CardPagerAdapter adapterViewPager;
     private boolean won = false;
     private Firebase mDeckCardsRef;
@@ -126,7 +129,6 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                         Card newCard = new Card(cardQuestion, cardAnswer);
                         mCards.add(newCard);
                     }
-
                     createCardFragment(0);
                 }
             }
@@ -153,7 +155,6 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                     mDeck.setRating(averageRating);
                     Firebase deckRatingRef = new Firebase(Constants.FIREBASE_URL_DECKS).child(mDeck.getId()).child("rating");
                     deckRatingRef.setValue(averageRating);
-                    Log.d("rating", mDeck.getRating()+"");
                 }
             }
 
@@ -171,9 +172,9 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
     private void createCardFragment(int position) {
         mCard = mCards.get(position);
-        Log.d("create", "card fragment");
+        Log.d("create card fragment", mCard.getQuestion());
         CardFragment cardFragment = CardFragment.newInstance(mCard);
-        FragmentTransaction ft = ((FragmentActivity) this).getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.cardContainer, cardFragment);
         ft.commit();
     }

@@ -42,9 +42,12 @@ public class CardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("onCreateView", "firing");
         View view = inflater.inflate(R.layout.fragment_card, container, false);
+        Log.d("view", "inflated");
         ButterKnife.bind(this, view);
         mCardTextView.setText(mCard.getQuestion());
+        Log.d("text", mCardTextView.getText().toString());
         return view;
     }
 
