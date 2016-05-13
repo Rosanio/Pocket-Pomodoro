@@ -3,6 +3,7 @@ package com.example.guest.pomodoro.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class CardFragment extends Fragment {
         Bundle args = new Bundle();
         args.putParcelable("card", Parcels.wrap(card));
         cardFragment.setArguments(args);
+        Log.d("created", "card fragment");
         return cardFragment;
     }
 

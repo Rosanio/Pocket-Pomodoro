@@ -2,12 +2,13 @@
     modify login activity to automatically authenticate when enter is pressed
     same for sign up activity
     possibly order decks by top rated (by default) and other options
-    allow users to search for a deck of cards
     possibly categorize decks of cards
-    possibly incorporate timer
+    incorporate timer
     when enter key is pressed on study activity, automatically submit answer
-    look into possibility of removing fragments from pageradapter as questions are answered
     have keyboard push up all other elements of page
+    remove viewpager from study activity and replace with randomly generated card fragment
+    pick a new card on swipe and flip card shortly on double tap to reveal answer
+    refactor createDeck activity into fragments and add alternative layout resources
  */
 
 package com.example.guest.pomodoro.ui;
@@ -59,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(studyIntent);
                 break;
             case R.id.studyButton:
-                Log.d("TAG", "it works");
                 Intent gameIntent = new Intent(MainActivity.this, SelectDeckActivity.class);
                 startActivity(gameIntent);
                 break;

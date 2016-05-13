@@ -60,7 +60,6 @@ public class SelectDeckActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 //submit query to firebase to return decks which match this name
                 String firstLetter = query.substring(0, 1).toUpperCase();
-                Log.d("firstLetter", firstLetter);
                 mQuery = new Firebase(Constants.FIREBASE_URL_DECKS).orderByChild("name").startAt(query.toUpperCase()).endAt(firstLetter+"\uf8ff");
                 setUpRecyclerView();
                 return false;

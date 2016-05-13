@@ -12,7 +12,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -56,7 +58,6 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     @Bind(R.id.submitButton) Button mSubmitButton;
     @Bind(R.id.resultsTextView) TextView mResultsTextView;
     @Bind(R.id.adjustPointsTextView) TextView mAdjustPointsTextView;
-    @Bind(R.id.viewPager) ViewPager mViewPager;
     @Bind(R.id.studyAgainButton) Button mStudyAgainButton;
     @Bind(R.id.showAnswerButton) Button mShowAnswerButton;
     private CardPagerAdapter adapterViewPager;
@@ -65,6 +66,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     private Firebase mDeckRatingRef;
     private SharedPreferences mSharedPreferences;
     private String mUId;
+    private Card mCard;
 
     int index;
     int points;
@@ -97,8 +99,10 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("its in", "onCreate study");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_study);
+        Log.d("it", "works");
         ButterKnife.bind(this);
         setupUI(findViewById(R.id.parentContainer));
 
@@ -123,8 +127,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                         mCards.add(newCard);
                     }
 
-                    adapterViewPager = new CardPagerAdapter(getSupportFragmentManager(), mCards);
-                    mViewPager.setAdapter(adapterViewPager);
+                    createCardFragment(0);
                 }
             }
 
@@ -166,14 +169,22 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         mShowAnswerButton.setOnClickListener(this);
     }
 
+    private void createCardFragment(int position) {
+        mCard = mCards.get(position);
+        Log.d("create", "card fragment");
+        CardFragment cardFragment = CardFragment.newInstance(mCard);
+        FragmentTransaction ft = ((FragmentActivity) this).getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.cardContainer, cardFragment);
+        ft.commit();
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.submitButton:
                 if(!won) {
-                    index = mViewPager.getCurrentItem();
                     if(answeredQuestions.size()==0) {
-                        guessAnswer(index);
+                        guessAnswer(mCard);
                     } else {
                         Boolean contains = false;
                         for(int i = 0; i < answeredQuestions.size(); i++) {
@@ -182,7 +193,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                             }
                         }
                         if(!contains) {
-                            guessAnswer(index);
+                            guessAnswer(mCard);
                         } else {
                             Toast.makeText(this, "You've already answered this question", Toast.LENGTH_LONG).show();
                         }
@@ -208,8 +219,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.showAnswerButton:
                 if(!won) {
-                    index = mViewPager.getCurrentItem();
-                    Toast.makeText(this, mCards.get(index).getAnswer(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, mCard.getAnswer(), Toast.LENGTH_LONG).show();
                     points -= 2;
                     mPointsTextView.setText(String.valueOf(points));
                 } else {
@@ -220,12 +230,12 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    public void guessAnswer(int index) {
+    public void guessAnswer(Card card) {
         String answer = mAnswerEditText.getText().toString();
         mAnswerEditText.setText("");
         mResultsTextView.setText("Your Answer: " + answer);
-        if (answer.toLowerCase().equals(mCards.get(index).getAnswer().toLowerCase())) {
-            answeredQuestions.add(mCards.get(index).getQuestion());
+        if (answer.toLowerCase().equals(card.getAnswer().toLowerCase())) {
+            answeredQuestions.add(card.getQuestion());
             points += 2;
             mPointsTextView.setText(String.valueOf(points));
             mAdjustPointsTextView.setText("+2 points");
