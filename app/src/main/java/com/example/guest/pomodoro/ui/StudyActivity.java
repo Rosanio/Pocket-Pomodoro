@@ -12,17 +12,23 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +47,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -56,15 +63,20 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     @Bind(R.id.submitButton) Button mSubmitButton;
     @Bind(R.id.resultsTextView) TextView mResultsTextView;
     @Bind(R.id.adjustPointsTextView) TextView mAdjustPointsTextView;
-    @Bind(R.id.viewPager) ViewPager mViewPager;
     @Bind(R.id.studyAgainButton) Button mStudyAgainButton;
     @Bind(R.id.showAnswerButton) Button mShowAnswerButton;
+    @Bind(R.id.cardContainer) FrameLayout mCardContainer;
     private CardPagerAdapter adapterViewPager;
     private boolean won = false;
     private Firebase mDeckCardsRef;
     private Firebase mDeckRatingRef;
     private SharedPreferences mSharedPreferences;
     private String mUId;
+    private Card mCard;
+    private Random randomNumberGenerator;
+    private int deckSize;
+
+    private GestureDetectorCompat mDetector;
 
     int index;
     int points;
@@ -102,6 +114,8 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         ButterKnife.bind(this);
         setupUI(findViewById(R.id.parentContainer));
 
+        randomNumberGenerator = new Random();
+
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mUId = mSharedPreferences.getString(Constants.KEY_UID, null);
 
@@ -122,9 +136,18 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                         Card newCard = new Card(cardQuestion, cardAnswer);
                         mCards.add(newCard);
                     }
+                    deckSize = mCards.size();
+                    int position = randomNumberGenerator.nextInt(mCards.size());
+                    createCardFragment(position);
 
-                    adapterViewPager = new CardPagerAdapter(getSupportFragmentManager(), mCards);
-                    mViewPager.setAdapter(adapterViewPager);
+                    mDetector = new GestureDetectorCompat(StudyActivity.this, new GestureListener());
+                    mCardContainer.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View view, MotionEvent event) {
+                            mDetector.onTouchEvent(event);
+                            return true;
+                        }
+                    });
                 }
             }
 
@@ -150,7 +173,6 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                     mDeck.setRating(averageRating);
                     Firebase deckRatingRef = new Firebase(Constants.FIREBASE_URL_DECKS).child(mDeck.getId()).child("rating");
                     deckRatingRef.setValue(averageRating);
-                    Log.d("rating", mDeck.getRating()+"");
                 }
             }
 
@@ -166,28 +188,21 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         mShowAnswerButton.setOnClickListener(this);
     }
 
+    private void createCardFragment(int position) {
+        mCard = mCards.get(position);
+        CardFragment cardFragment = CardFragment.newInstance(mCard);
+        FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.cardContainer, cardFragment);
+        ft.commit();
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.submitButton:
                 if(!won) {
-                    index = mViewPager.getCurrentItem();
-                    if(answeredQuestions.size()==0) {
-                        guessAnswer(index);
-                    } else {
-                        Boolean contains = false;
-                        for(int i = 0; i < answeredQuestions.size(); i++) {
-                            if(answeredQuestions.get(i).equals(mCards.get(index).getQuestion())) {
-                                contains = true;
-                            }
-                        }
-                        if(!contains) {
-                            guessAnswer(index);
-                        } else {
-                            Toast.makeText(this, "You've already answered this question", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                    if(answeredQuestions.size()== mCards.size()) {
+                    guessAnswer(mCard);
+                    if(answeredQuestions.size()== deckSize) {
                         won = true;
                         mResultsTextView.setText("You've correctly guessed all questions!");
                         mAdjustPointsTextView.setText("Final score: " + points);
@@ -195,6 +210,10 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                         mStudyAgainButton.setVisibility(View.VISIBLE);
                         mSubmitButton.setText("Study a New Deck");
                         mShowAnswerButton.setText("Rate this Deck");
+                    } else {
+                        mCards.remove(mCard);
+                        int position = randomNumberGenerator.nextInt(mCards.size());
+                        createCardFragment(position);
                     }
                 } else {
                     Intent intent = new Intent(StudyActivity.this, SelectDeckActivity.class);
@@ -208,8 +227,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.showAnswerButton:
                 if(!won) {
-                    index = mViewPager.getCurrentItem();
-                    Toast.makeText(this, mCards.get(index).getAnswer(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, mCard.getAnswer(), Toast.LENGTH_LONG).show();
                     points -= 2;
                     mPointsTextView.setText(String.valueOf(points));
                 } else {
@@ -220,12 +238,13 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    public void guessAnswer(int index) {
+    public void guessAnswer(Card card) {
         String answer = mAnswerEditText.getText().toString();
         mAnswerEditText.setText("");
         mResultsTextView.setText("Your Answer: " + answer);
-        if (answer.toLowerCase().equals(mCards.get(index).getAnswer().toLowerCase())) {
-            answeredQuestions.add(mCards.get(index).getQuestion());
+        if (answer.toLowerCase().equals(card.getAnswer().toLowerCase())) {
+            answeredQuestions.add(card.getQuestion());
+            Log.d(answeredQuestions.size()+"", mCards.size()+"");
             points += 2;
             mPointsTextView.setText(String.valueOf(points));
             mAdjustPointsTextView.setText("+2 points");
@@ -247,5 +266,16 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         Firebase deckUsersRatingRef = new Firebase(mDeckRatingRef + "/" + mUId);
         deckUsersRatingRef.setValue(rating);
         Toast.makeText(StudyActivity.this, "You rated " + mDeck.getName() + " at " + rating + " stars.", Toast.LENGTH_SHORT).show();
+    }
+
+    class GestureListener extends GestureDetector.SimpleOnGestureListener {
+        private static final String DEBUG_TAG = "Gestures";
+
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
+            int position = randomNumberGenerator.nextInt(mCards.size());
+            createCardFragment(position);
+            return true;
+        }
     }
 }

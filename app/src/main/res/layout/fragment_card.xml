@@ -13,13 +13,14 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
+        android:layout_height="200dp"
+        android:gravity="center"
+        android:background="@drawable/flashcard">
 
         <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/questionScrollView" >
+            android:id="@+id/questionScrollView">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -30,6 +31,7 @@
                 android:text="test"
                 android:gravity="center" />
         </ScrollView>
+
     </LinearLayout>
 
 
