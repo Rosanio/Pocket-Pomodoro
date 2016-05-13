@@ -15,10 +15,12 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +75,8 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     private Card mCard;
     private Random randomNumberGenerator;
     private int deckSize;
+
+    private GestureDetectorCompat mDetector;
 
     int index;
     int points;
@@ -135,6 +139,15 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                     deckSize = mCards.size();
                     int position = randomNumberGenerator.nextInt(mCards.size());
                     createCardFragment(position);
+
+                    mDetector = new GestureDetectorCompat(StudyActivity.this, new GestureListener());
+                    mCardContainer.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View view, MotionEvent event) {
+                            mDetector.onTouchEvent(event);
+                            return true;
+                        }
+                    });
                 }
             }
 
@@ -253,5 +266,16 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         Firebase deckUsersRatingRef = new Firebase(mDeckRatingRef + "/" + mUId);
         deckUsersRatingRef.setValue(rating);
         Toast.makeText(StudyActivity.this, "You rated " + mDeck.getName() + " at " + rating + " stars.", Toast.LENGTH_SHORT).show();
+    }
+
+    class GestureListener extends GestureDetector.SimpleOnGestureListener {
+        private static final String DEBUG_TAG = "Gestures";
+
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
+            int position = randomNumberGenerator.nextInt(mCards.size());
+            createCardFragment(position);
+            return true;
+        }
     }
 }

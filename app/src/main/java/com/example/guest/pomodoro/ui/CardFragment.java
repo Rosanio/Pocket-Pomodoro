@@ -49,13 +49,13 @@ public class CardFragment extends Fragment {
         ButterKnife.bind(this, view);
         mCardTextView.setText(mCard.getQuestion());
         mDetector = new GestureDetectorCompat(getActivity(), new GestureListener());
-        mParentContainer.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                mDetector.onTouchEvent(event);
-                return true;
-            }
-        });
+//        mParentContainer.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent event) {
+//                mDetector.onTouchEvent(event);
+//                return true;
+//            }
+//        });
         return view;
     }
 

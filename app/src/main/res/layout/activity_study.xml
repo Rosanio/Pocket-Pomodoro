@@ -26,14 +26,22 @@
             android:textSize="30dp" />
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/cardContainer"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_weight="6"
-        android:layout_below="@+id/pointsLayout">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pointsLayout"
+        android:id="@+id/cardContainersLayout">
 
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/cardContainer"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@+id/pointsLayout">
+
+        </FrameLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -118,7 +126,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/editTextLayout"
         android:gravity="center"
-        android:layout_below="@+id/cardContainer">
+        android:layout_below="@+id/cardContainersLayout">
 
         <EditText
             android:layout_width="wrap_content"
