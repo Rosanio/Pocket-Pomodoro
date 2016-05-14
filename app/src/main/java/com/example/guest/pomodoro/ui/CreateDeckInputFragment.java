@@ -1,6 +1,7 @@
 package com.example.guest.pomodoro.ui;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.example.guest.pomodoro.R;
 import com.example.guest.pomodoro.models.Card;
 import com.example.guest.pomodoro.services.YandexService;
+import com.example.guest.pomodoro.util.OnCardAddedListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,12 +40,21 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
     @Bind(R.id.loadingTextView) TextView mLoadingTextView;
     String[] languages = {"Spanish", "French", "German", "Italian"};
     ArrayList<Card> cards = new ArrayList<>();
-
+    OnCardAddedListener mOnCardAddedListener;
 
     public CreateDeckInputFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mOnCardAddedListener = (OnCardAddedListener)  context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + e.getMessage());
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,7 +82,7 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
                     if (cards.size() == 0) {
                         Card card = new Card(question, answer);
                         cards.add(card);
-                        //have to send this new array list to other fragment somehow
+                        mOnCardAddedListener.onCardAdded(cards);
                     } else {
                         Boolean contains = false;
                         for (int i = 0; i < cards.size(); i++) {
@@ -82,7 +93,7 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
                         if (!contains) {
                             Card card = new Card(question, answer);
                             cards.add(card);
-                            //send updated array list to other fragment
+                            mOnCardAddedListener.onCardAdded(cards);
                         } else {
                             Toast.makeText(getActivity(), "This question has already been added", Toast.LENGTH_LONG).show();
                         }
@@ -144,7 +155,7 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //same deal, pass along updated cards list to other fragment
+                        mOnCardAddedListener.onCardAdded(cards);
                         mLoadingTextView.setText("");
                     }
                 });

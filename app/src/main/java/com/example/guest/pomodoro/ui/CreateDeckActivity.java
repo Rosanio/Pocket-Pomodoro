@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import com.example.guest.pomodoro.adapters.CardListAdapter;
 import com.example.guest.pomodoro.R;
 import com.example.guest.pomodoro.models.Deck;
 import com.example.guest.pomodoro.services.YandexService;
+import com.example.guest.pomodoro.util.OnCardAddedListener;
 import com.firebase.client.Firebase;
 
 import java.io.IOException;
@@ -39,10 +41,8 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class CreateDeckActivity extends AppCompatActivity {
-
-
-
+public class CreateDeckActivity extends AppCompatActivity implements OnCardAddedListener {
+    private ArrayList<Card> mCards;
 
     public void hideKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -74,5 +74,11 @@ public class CreateDeckActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_deck);
         ButterKnife.bind(this);
         setupUI(findViewById(R.id.parentContainer));
+    }
+
+    @Override
+    public void onCardAdded(ArrayList<Card> cards) {
+        mCards = cards;
+        Log.d("cards", mCards+"");
     }
 }
