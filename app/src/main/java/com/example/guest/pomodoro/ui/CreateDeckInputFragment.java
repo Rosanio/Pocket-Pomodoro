@@ -81,6 +81,9 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
                 String question = mQuestionEditText.getText().toString();
                 String answer = mAnswerEditText.getText().toString();
                 if (question.length() > 0 && answer.length() > 0) {
+                    if(mCards == null) {
+                        mCards = new ArrayList<>();
+                    }
 
                     if (mCards.size() == 0) {
                         Card card = new Card(question, answer);

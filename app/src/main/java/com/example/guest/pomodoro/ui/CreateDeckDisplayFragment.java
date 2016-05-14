@@ -96,7 +96,7 @@ public class CreateDeckDisplayFragment extends Fragment implements View.OnClickL
             newDeck.setId(deckId);
             newDeck.setDate(new Date());
             newDeckRef.setValue(newDeck);
-            Firebase deckCardsRef = new Firebase(Constants.FIREBASE_URL_CARDS).child(deckId);
+            Firebase deckCardsRef = mCardsRef.child(deckId);
             for(int i = 0; i < mCards.size(); i++) {
                 Card newCard = mCards.get(i);
                 Firebase newCardRef = deckCardsRef.push();
@@ -114,8 +114,10 @@ public class CreateDeckDisplayFragment extends Fragment implements View.OnClickL
 
     //this method is called from CreateDeckActivity when the onCardAdded method fires. The instance of ArrayList being used needs to remain the same, so the arraylist is cleared, and all instances of Card contained in cards (the passed in arrayList) are added to mCards. Then, the adapter is notified that its data set has changed, and updates the recyclerView accordingly
     public void updateCardsList(ArrayList<Card> cards) {
-        mCards.clear();
-        mCards.addAll(cards);
+        if(mCards != null) {
+            mCards.clear();
+            mCards.addAll(cards);
+        }
         if(adapter != null) {
             adapter.notifyDataSetChanged();
         }

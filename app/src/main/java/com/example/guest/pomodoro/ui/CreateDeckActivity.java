@@ -75,7 +75,9 @@ public class CreateDeckActivity extends AppCompatActivity implements OnCardAdded
         super.onCreate(savedInstanceState);
         if(savedInstanceState != null) {
             mCards = Parcels.unwrap(savedInstanceState.getParcelable("cards"));
-            this.onCardAdded(mCards);
+            if(mCards != null) {
+                this.onCardAdded(mCards);
+            }
             CreateDeckInputFragment inputFrag = (CreateDeckInputFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentInput);
             if(inputFrag != null) {
                 inputFrag.setCards(mCards);
