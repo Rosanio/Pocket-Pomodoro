@@ -66,7 +66,7 @@ public class AddDeckFragment extends DialogFragment implements TextView.OnEditor
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if(EditorInfo.IME_ACTION_DONE == actionId) {
-            AddDeckDialogListener listener = (AddDeckDialogListener) getActivity();
+            AddDeckDialogListener listener = (AddDeckDialogListener) getActivity().getSupportFragmentManager().findFragmentById(R.id.fragmentDisplay);
             listener.onFinishEditDialog(mDeckNameEditText.getText().toString(), mDeckCategoryEditText.getText().toString());
             dismiss();
             return true;

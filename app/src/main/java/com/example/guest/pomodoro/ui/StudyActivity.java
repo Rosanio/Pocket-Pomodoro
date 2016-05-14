@@ -34,7 +34,6 @@ import android.widget.Toast;
 
 import com.example.guest.pomodoro.Constants;
 import com.example.guest.pomodoro.R;
-import com.example.guest.pomodoro.adapters.CardPagerAdapter;
 import com.example.guest.pomodoro.models.Card;
 import com.example.guest.pomodoro.models.Deck;
 import com.firebase.client.DataSnapshot;
@@ -66,7 +65,6 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     @Bind(R.id.studyAgainButton) Button mStudyAgainButton;
     @Bind(R.id.showAnswerButton) Button mShowAnswerButton;
     @Bind(R.id.cardContainer) FrameLayout mCardContainer;
-    private CardPagerAdapter adapterViewPager;
     private boolean won = false;
     private Firebase mDeckCardsRef;
     private Firebase mDeckRatingRef;

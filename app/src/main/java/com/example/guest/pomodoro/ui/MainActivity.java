@@ -6,8 +6,6 @@
     incorporate timer
     when enter key is pressed on study activity, automatically submit answer
     have keyboard push up all other elements of page
-    remove viewpager from study activity and replace with randomly generated card fragment
-    pick a new card on swipe and flip card shortly on double tap to reveal answer
     refactor createDeck activity into fragments and add alternative layout resources
  */
 
