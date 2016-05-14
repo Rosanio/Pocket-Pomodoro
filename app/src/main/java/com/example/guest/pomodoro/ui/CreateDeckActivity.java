@@ -80,5 +80,9 @@ public class CreateDeckActivity extends AppCompatActivity implements OnCardAdded
     public void onCardAdded(ArrayList<Card> cards) {
         mCards = cards;
         Log.d("cards", mCards+"");
+        CreateDeckDisplayFragment displayFrag = (CreateDeckDisplayFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentDisplay);
+        if(displayFrag != null) {
+            displayFrag.updateCardsList(cards);
+        }
     }
 }

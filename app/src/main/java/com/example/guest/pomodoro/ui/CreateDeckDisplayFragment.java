@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,7 @@ public class CreateDeckDisplayFragment extends Fragment implements View.OnClickL
     CardListAdapter adapter;
     private Firebase mDecksRef;
     private Firebase mCardsRef;
-    private ArrayList<Card> cards = new ArrayList<>();
+    private ArrayList<Card> mCards = new ArrayList<>();
 
 
     public CreateDeckDisplayFragment() {
@@ -58,11 +59,10 @@ public class CreateDeckDisplayFragment extends Fragment implements View.OnClickL
 
         mCreateDeckButton.setOnClickListener(this);
 
-        adapter = new CardListAdapter(getActivity(), cards);
+        adapter = new CardListAdapter(getActivity(), mCards);
         mCardsRecyclerView.setAdapter(adapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mCardsRecyclerView.setLayoutManager(layoutManager);
-        mCardsRecyclerView.setHasFixedSize(true);
 
         return view;
     }
@@ -70,17 +70,13 @@ public class CreateDeckDisplayFragment extends Fragment implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
             case R.id.createDeckButton:
-                if(cards.size() > 0) {
+                if(mCards.size() > 0) {
                     showNewDeckDialog();
                 } else {
                     Toast.makeText(getActivity(), "Please add at least one card", Toast.LENGTH_SHORT).show();
                 }
-
                 break;
-
-
         }
     }
 
@@ -101,8 +97,8 @@ public class CreateDeckDisplayFragment extends Fragment implements View.OnClickL
             newDeck.setDate(new Date());
             newDeckRef.setValue(newDeck);
             Firebase deckCardsRef = new Firebase(Constants.FIREBASE_URL_CARDS).child(deckId);
-            for(int i = 0; i < cards.size(); i++) {
-                Card newCard = cards.get(i);
+            for(int i = 0; i < mCards.size(); i++) {
+                Card newCard = mCards.get(i);
                 Firebase newCardRef = deckCardsRef.push();
                 String cardId = newCardRef.getKey();
                 newCard.setId(cardId);
@@ -114,6 +110,14 @@ public class CreateDeckDisplayFragment extends Fragment implements View.OnClickL
             Toast.makeText(getActivity(), "You need to name and categorize your deck", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    public void updateCardsList(ArrayList<Card> cards) {
+        mCards.clear();
+        mCards.addAll(cards);
+        Log.d("it works", mCards.get(0).getAnswer());
+        adapter.notifyDataSetChanged();
+        Log.d("recyclerView", mCardsRecyclerView.getAdapter().getItemCount()+"");
     }
 
 }
