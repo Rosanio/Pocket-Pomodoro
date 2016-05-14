@@ -28,143 +28,28 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/contentLayout"
         android:layout_below="@+id/titleLayout"
-        android:layout_above="@+id/studyButtonLayout">
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/scrollView"
-            android:layout_weight="1">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:id="@+id/formsLayout">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/questionTextInputLayout">
-
-                    <EditText
-                        android:id="@+id/questionEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Question" />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/answerTextInputLayout">
-
-                    <EditText
-                        android:id="@+id/answerEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Answer" />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.66">
-
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Add        Card"
-                            android:id="@+id/addCardButton"
-                            android:background="@color/colorPrimary"
-                            android:textColor="@color/colorTextWhite"
-                            android:padding="5dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.33">
-
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Translate Question"
-                            android:id="@+id/translateQuestionButton"
-                            android:background="@color/colorPrimaryDark"
-                            android:layout_marginLeft="5dp"
-                            android:textColor="@color/colorPrimaryLight" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Select a language to translate to:"
-                    android:id="@+id/textView"
-                    android:layout_marginTop="15dp" />
-
-                <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/languageSpinner" />
-
-            </LinearLayout>
-        </ScrollView>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:id="@+id/cardListLayout">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/loadingTextView"
-                android:textSize="12sp" />
-
-            <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/recyclerView"
-                android:layout_marginTop="15dp" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/studyButtonLayout"
         android:layout_alignParentBottom="true">
 
-        <Button
-            android:layout_width="match_parent"
+
+        <fragment
+            android:id="@+id/fragmentInput"
+            android:name="com.example.guest.pomodoro.ui.CreateDeckInputFragment"
             android:layout_height="wrap_content"
-            android:text="Create Deck"
-            android:id="@+id/createDeckButton"
-            android:background="@color/colorAccent"
-            android:textColor="@color/colorPrimaryLight"
-            android:textSize="18sp" />
+            android:layout_width="match_parent"
+            tools:layout="@layout/fragment_create_deck_input" />
+
+        <fragment
+            android:id="@+id/fragmentDisplay"
+            android:name="com.example.guest.pomodoro.ui.CreateDeckDisplayFragment"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            tools:layout="@layout/fragment_create_deck_display" />
+
     </LinearLayout>
 
 </RelativeLayout>
