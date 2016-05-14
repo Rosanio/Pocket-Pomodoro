@@ -31,6 +31,8 @@ import com.example.guest.pomodoro.services.YandexService;
 import com.example.guest.pomodoro.util.OnCardAddedListener;
 import com.firebase.client.Firebase;
 
+import org.parceler.Parcels;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,18 +73,34 @@ public class CreateDeckActivity extends AppCompatActivity implements OnCardAdded
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState != null) {
+            mCards = Parcels.unwrap(savedInstanceState.getParcelable("cards"));
+            this.onCardAdded(mCards);
+            CreateDeckInputFragment inputFrag = (CreateDeckInputFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentInput);
+            if(inputFrag != null) {
+                inputFrag.setCards(mCards);
+            }
+        }
         setContentView(R.layout.activity_create_deck);
         ButterKnife.bind(this);
         setupUI(findViewById(R.id.parentContainer));
     }
 
     @Override
+    //this method is called from the CreateDeckInputFragment, and will replace the current value of mCards with the passed in arraylist cards. Then it finds the instance of CreateDeckDisplayFragment which it contains and calls its updateCardsList method, passing in the updated list of cards.
     public void onCardAdded(ArrayList<Card> cards) {
         mCards = cards;
-        Log.d("cards", mCards+"");
         CreateDeckDisplayFragment displayFrag = (CreateDeckDisplayFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentDisplay);
         if(displayFrag != null) {
-            displayFrag.updateCardsList(cards);
+            displayFrag.updateCardsList(mCards);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if(mCards != null) {
+            outState.putParcelable("cards", Parcels.wrap(mCards));
+        }
+        super.onSaveInstanceState(outState);
     }
 }

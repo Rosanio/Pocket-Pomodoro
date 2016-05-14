@@ -112,12 +112,13 @@ public class CreateDeckDisplayFragment extends Fragment implements View.OnClickL
 
     }
 
+    //this method is called from CreateDeckActivity when the onCardAdded method fires. The instance of ArrayList being used needs to remain the same, so the arraylist is cleared, and all instances of Card contained in cards (the passed in arrayList) are added to mCards. Then, the adapter is notified that its data set has changed, and updates the recyclerView accordingly
     public void updateCardsList(ArrayList<Card> cards) {
         mCards.clear();
         mCards.addAll(cards);
-        Log.d("it works", mCards.get(0).getAnswer());
-        adapter.notifyDataSetChanged();
-        Log.d("recyclerView", mCardsRecyclerView.getAdapter().getItemCount()+"");
+        if(adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
 }

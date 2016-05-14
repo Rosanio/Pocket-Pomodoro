@@ -39,7 +39,7 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
     @Bind(R.id.translateQuestionButton) Button mTranslateQuestionButton;
     @Bind(R.id.loadingTextView) TextView mLoadingTextView;
     String[] languages = {"Spanish", "French", "German", "Italian"};
-    ArrayList<Card> cards = new ArrayList<>();
+    ArrayList<Card> mCards = new ArrayList<>();
     OnCardAddedListener mOnCardAddedListener;
 
     public CreateDeckInputFragment() {
@@ -47,11 +47,14 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
     }
 
     @Override
+    //called as soon as a fragment is attached to an activity
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mOnCardAddedListener = (OnCardAddedListener)  context;
+            //if the parent activity implements this interface, then mOnCardAddedListener will be set to the instance of OnCardAddedListener which exists in the activity. This means information can be passed to the activity by calling its onCardAdded method.
+            mOnCardAddedListener = (OnCardAddedListener) context;
         } catch (ClassCastException e) {
+            //if the parent activity does not implement OnCardAddedListener, this error will fire.
             throw new ClassCastException(context.toString() + e.getMessage());
         }
     }
@@ -79,21 +82,23 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
                 String answer = mAnswerEditText.getText().toString();
                 if (question.length() > 0 && answer.length() > 0) {
 
-                    if (cards.size() == 0) {
+                    if (mCards.size() == 0) {
                         Card card = new Card(question, answer);
-                        cards.add(card);
-                        mOnCardAddedListener.onCardAdded(cards);
+                        mCards.add(card);
+                        //This method refers to the overwritten onCardAdded method in CreateDeckActivity, meaning the value of mCards in that activity will be replaced with the value cards being passed into this method.
+                        mOnCardAddedListener.onCardAdded(mCards);
                     } else {
                         Boolean contains = false;
-                        for (int i = 0; i < cards.size(); i++) {
-                            if (cards.get(i).getQuestion().equals(question)) {
+                        for (int i = 0; i < mCards.size(); i++) {
+                            if (mCards.get(i).getQuestion().equals(question)) {
                                 contains = true;
                             }
                         }
                         if (!contains) {
                             Card card = new Card(question, answer);
-                            cards.add(card);
-                            mOnCardAddedListener.onCardAdded(cards);
+                            mCards.add(card);
+                            //This method refers to the overwritten onCardAdded method in CreateDeckActivity, meaning the value of mCards in that activity will be replaced with the value cards being passed into this method.
+                            mOnCardAddedListener.onCardAdded(mCards);
                         } else {
                             Toast.makeText(getActivity(), "This question has already been added", Toast.LENGTH_LONG).show();
                         }
@@ -111,13 +116,13 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
                 String language = mLanguageSpinner.getSelectedItem().toString();
                 String text = mQuestionEditText.getText().toString();
                 if(text.length() > 0) {
-                    if(cards.size() == 0) {
+                    if(mCards.size() == 0) {
                         mLoadingTextView.setText("translating...");
                         translateText(text, language);
                     } else {
                         Boolean contains = false;
-                        for(int i = 0; i < cards.size(); i++) {
-                            if(cards.get(i).getQuestion().equals(text)) {
+                        for(int i = 0; i < mCards.size(); i++) {
+                            if(mCards.get(i).getQuestion().equals(text)) {
                                 contains = true;
                             }
                         }
@@ -150,18 +155,23 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
 
             @Override
             public void onResponse(Call call, Response response) {
-                cards = yandexService.processResults(cards, question, response);
+                mCards = yandexService.processResults(mCards, question, response);
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mOnCardAddedListener.onCardAdded(cards);
+                        //This method refers to the overwritten onCardAdded method in CreateDeckActivity, meaning the value of mCards in that activity will be replaced with the value cards being passed into this method.
+                        mOnCardAddedListener.onCardAdded(mCards);
                         mLoadingTextView.setText("");
                     }
                 });
 
             }
         });
+    }
+
+    public void setCards(ArrayList<Card> cards) {
+        mCards = cards;
     }
 
 }
