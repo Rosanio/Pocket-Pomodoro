@@ -6,7 +6,7 @@
     incorporate timer
     when enter key is pressed on study activity, automatically submit answer
     have keyboard push up all other elements of page
-    refactor createDeck activity into fragments and add alternative layout resources
+    possibly add animation
  */
 
 package com.example.guest.pomodoro.ui;
@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDeckButton.setOnClickListener(this);
         mStudyButton.setOnClickListener(this);
         mEmailLabel.setOnClickListener(this);
+
+
     }
 
     @Override

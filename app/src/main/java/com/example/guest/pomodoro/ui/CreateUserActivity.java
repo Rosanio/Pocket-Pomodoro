@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,6 +44,22 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mSharedPreferencesEditor = mSharedPreferences.edit();
         mNewAccountButton.setOnClickListener(this);
+
+        mConfirmPasswordEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case KeyEvent.KEYCODE_ENTER:
+                            Log.d("it", "works");
+                            createNewUser();
+                            return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     @Override

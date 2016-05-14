@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,6 +43,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         mLogInButton.setOnClickListener(this);
         mSignUpTextView.setOnClickListener(this);
+
+        mPasswordEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch(keyCode) {
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case KeyEvent.KEYCODE_ENTER:
+                            loginWithPassword();
+                            return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     @Override
