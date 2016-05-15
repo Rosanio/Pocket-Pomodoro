@@ -1,6 +1,6 @@
 /*todo:
-    modify login activity to automatically authenticate when enter is pressed
-    same for sign up activity
+    add progress dialog for login screen
+    implement other improvements to login screen
     possibly order decks by top rated (by default) and other options
     possibly categorize decks of cards
     incorporate timer

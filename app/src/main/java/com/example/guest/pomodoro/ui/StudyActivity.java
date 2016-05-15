@@ -21,10 +21,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -184,10 +186,25 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         mSubmitButton.setOnClickListener(this);
         mStudyAgainButton.setOnClickListener(this);
         mShowAnswerButton.setOnClickListener(this);
+
+        mAnswerEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(EditorInfo.IME_ACTION_DONE == actionId) {
+                    if(!won) {
+                        hideKeyboard(StudyActivity.this);
+                        guessAnswer(mCard);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     private void createCardFragment(int position) {
         mCard = mCards.get(position);
+        Log.d("card set", mCard.getQuestion());
         CardFragment cardFragment = CardFragment.newInstance(mCard);
         FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.cardContainer, cardFragment);
@@ -200,19 +217,6 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
             case R.id.submitButton:
                 if(!won) {
                     guessAnswer(mCard);
-                    if(answeredQuestions.size()== deckSize) {
-                        won = true;
-                        mResultsTextView.setText("You've correctly guessed all questions!");
-                        mAdjustPointsTextView.setText("Final score: " + points);
-                        mAnswerEditText.setVisibility(View.INVISIBLE);
-                        mStudyAgainButton.setVisibility(View.VISIBLE);
-                        mSubmitButton.setText("Study a New Deck");
-                        mShowAnswerButton.setText("Rate this Deck");
-                    } else {
-                        mCards.remove(mCard);
-                        int position = randomNumberGenerator.nextInt(mCards.size());
-                        createCardFragment(position);
-                    }
                 } else {
                     Intent intent = new Intent(StudyActivity.this, SelectDeckActivity.class);
                     startActivity(intent);
@@ -238,18 +242,36 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
     public void guessAnswer(Card card) {
         String answer = mAnswerEditText.getText().toString();
-        mAnswerEditText.setText("");
-        mResultsTextView.setText("Your Answer: " + answer);
-        if (answer.toLowerCase().equals(card.getAnswer().toLowerCase())) {
+        if (answer.toLowerCase().equals(mCard.getAnswer().toLowerCase())) {
+            Log.d("correct", mCard.getAnswer());
             answeredQuestions.add(card.getQuestion());
-            Log.d(answeredQuestions.size()+"", mCards.size()+"");
             points += 2;
             mPointsTextView.setText(String.valueOf(points));
             mAdjustPointsTextView.setText("+2 points");
+            checkWin();
         } else {
+            Log.d("incorrect", mCard.getAnswer() + " " + answer);
             points -= 1;
             mPointsTextView.setText(String.valueOf(points));
             mAdjustPointsTextView.setText("-1 points");
+        }
+        mAnswerEditText.setText("");
+        mResultsTextView.setText("Your Answer: " + answer);
+    }
+
+    public void checkWin() {
+        if(answeredQuestions.size()== deckSize) {
+            won = true;
+            mResultsTextView.setText("You've correctly guessed all questions!");
+            mAdjustPointsTextView.setText("Final score: " + points);
+            mAnswerEditText.setVisibility(View.INVISIBLE);
+            mStudyAgainButton.setVisibility(View.VISIBLE);
+            mSubmitButton.setText("Study a New Deck");
+            mShowAnswerButton.setText("Rate this Deck");
+        } else {
+            mCards.remove(mCard);
+            int position = randomNumberGenerator.nextInt(mCards.size());
+            createCardFragment(position);
         }
     }
 
@@ -271,8 +293,15 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
-            int position = randomNumberGenerator.nextInt(mCards.size());
-            createCardFragment(position);
+            String newCardQuestion = mCard.getQuestion();
+            int position = 0;
+            if(mCards.size() > 1) {
+                while(newCardQuestion.equals(mCard.getQuestion())) {
+                    position = randomNumberGenerator.nextInt(mCards.size());
+                    newCardQuestion = mCards.get(position).getQuestion();
+                }
+                createCardFragment(position);
+            }
             return true;
         }
     }

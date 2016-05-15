@@ -4,6 +4,7 @@ package com.example.guest.pomodoro.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,35 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
         mAddCardButton.setOnClickListener(this);
         mTranslateQuestionButton.setOnClickListener(this);
 
+        mQuestionEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch(keyCode) {
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case KeyEvent.KEYCODE_ENTER:
+                            mAnswerEditText.requestFocus();
+                            return true;
+                    }
+                }
+                return false;
+            }
+        });
+        mAnswerEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case KeyEvent.KEYCODE_ENTER:
+                            addCard();
+                            return true;
+                    }
+                }
+                return false;
+            }
+        });
+
         return view;
     }
 
@@ -78,41 +108,7 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addCardButton:
-                String question = mQuestionEditText.getText().toString();
-                String answer = mAnswerEditText.getText().toString();
-                if (question.length() > 0 && answer.length() > 0) {
-                    if(mCards == null) {
-                        mCards = new ArrayList<>();
-                    }
-
-                    if (mCards.size() == 0) {
-                        Card card = new Card(question, answer);
-                        mCards.add(card);
-                        //This method refers to the overwritten onCardAdded method in CreateDeckActivity, meaning the value of mCards in that activity will be replaced with the value cards being passed into this method.
-                        mOnCardAddedListener.onCardAdded(mCards);
-                    } else {
-                        Boolean contains = false;
-                        for (int i = 0; i < mCards.size(); i++) {
-                            if (mCards.get(i).getQuestion().equals(question)) {
-                                contains = true;
-                            }
-                        }
-                        if (!contains) {
-                            Card card = new Card(question, answer);
-                            mCards.add(card);
-                            //This method refers to the overwritten onCardAdded method in CreateDeckActivity, meaning the value of mCards in that activity will be replaced with the value cards being passed into this method.
-                            mOnCardAddedListener.onCardAdded(mCards);
-                        } else {
-                            Toast.makeText(getActivity(), "This question has already been added", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                } else {
-                    Toast.makeText(getActivity(), "Please fill out both question and answer forms", Toast.LENGTH_LONG).show();
-                }
-
-                mQuestionEditText.setText("");
-                mAnswerEditText.setText("");
-                mQuestionEditText.requestFocus();
+                addCard();
                 break;
 
             case R.id.translateQuestionButton:
@@ -175,6 +171,44 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
 
     public void setCards(ArrayList<Card> cards) {
         mCards = cards;
+    }
+
+    public void addCard() {
+        String question = mQuestionEditText.getText().toString();
+        String answer = mAnswerEditText.getText().toString();
+        if (question.length() > 0 && answer.length() > 0) {
+            if(mCards == null) {
+                mCards = new ArrayList<>();
+            }
+
+            if (mCards.size() == 0) {
+                Card card = new Card(question, answer);
+                mCards.add(card);
+                //This method refers to the overwritten onCardAdded method in CreateDeckActivity, meaning the value of mCards in that activity will be replaced with the value cards being passed into this method.
+                mOnCardAddedListener.onCardAdded(mCards);
+            } else {
+                Boolean contains = false;
+                for (int i = 0; i < mCards.size(); i++) {
+                    if (mCards.get(i).getQuestion().equals(question)) {
+                        contains = true;
+                    }
+                }
+                if (!contains) {
+                    Card card = new Card(question, answer);
+                    mCards.add(card);
+                    //This method refers to the overwritten onCardAdded method in CreateDeckActivity, meaning the value of mCards in that activity will be replaced with the value cards being passed into this method.
+                    mOnCardAddedListener.onCardAdded(mCards);
+                } else {
+                    Toast.makeText(getActivity(), "This question has already been added", Toast.LENGTH_LONG).show();
+                }
+            }
+        } else {
+            Toast.makeText(getActivity(), "Please fill out both question and answer forms", Toast.LENGTH_LONG).show();
+        }
+
+        mQuestionEditText.setText("");
+        mAnswerEditText.setText("");
+        mQuestionEditText.requestFocus();
     }
 
 }

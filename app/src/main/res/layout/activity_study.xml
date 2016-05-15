@@ -134,6 +134,8 @@
             android:id="@+id/answerEditText"
             android:hint="Your Answer"
             android:layout_below="@+id/viewPager"
+            android:imeOptions="actionDone"
+            android:inputType="text"
             android:gravity="center" />
     </LinearLayout>
 
