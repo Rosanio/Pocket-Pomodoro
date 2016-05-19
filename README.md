@@ -1,6 +1,6 @@
 # Pocket Pomodoro
 
-##### Study App | May 2-3, 2016
+##### Study App | May 13, 2016
 
 #### By Matt Rosanio
 
