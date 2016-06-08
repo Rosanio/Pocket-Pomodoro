@@ -1,5 +1,6 @@
 package com.example.guest.pomodoro.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -30,6 +31,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Firebase mFirebaseRef;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mSharedPreferencesEditor;
+    private ProgressDialog mAuthProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 return false;
             }
         });
+
+        createAuthProgressDialog();
     }
 
     @Override
@@ -79,14 +83,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if(email.equals("")) {
             mEmailEditText.setError("Please enter your email");
+            return;
         }
         if(password.equals("")) {
             mPasswordEditText.setError("Password cannot be blank");
+            return;
         }
+
+        mAuthProgressDialog.show();
 
         mFirebaseRef.authWithPassword(email, password, new Firebase.AuthResultHandler() {
             @Override
             public void onAuthenticated(AuthData authData) {
+                mAuthProgressDialog.dismiss();
                 if(authData != null) {
                     String userUid = authData.getUid();
                     mSharedPreferencesEditor.putString(Constants.KEY_UID, userUid).apply();
@@ -119,5 +128,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void showErrorToast(String message) {
         Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+    }
+
+    private void createAuthProgressDialog() {
+        mAuthProgressDialog = new ProgressDialog(this);
+        mAuthProgressDialog.setTitle("Loading...");
+        mAuthProgressDialog.setMessage("Authenticating with Firebase...");
+        mAuthProgressDialog.setCancelable(false);
     }
 }
