@@ -106,6 +106,7 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
 
                     @Override
                     public void onAuthenticationError(FirebaseError firebaseError) {
+                        mAuthProgressDialog.dismiss();
                         switch(firebaseError.getCode()) {
                             case FirebaseError.INVALID_EMAIL:
                             case FirebaseError.USER_DOES_NOT_EXIST:
@@ -126,6 +127,7 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onError(FirebaseError firebaseError) {
+                mAuthProgressDialog.dismiss();
                 Log.d(TAG, "error occured " + firebaseError);
             }
         });

@@ -21,4 +21,6 @@ public class Constants {
     public static final String FIREBASE_URL_DECKS = FIREBASE_ROOT_URL + "/" + FIREBASE_LOCATION_DECKS;
     public static final String FIREBASE_LOCATION_CARDS = "cards";
     public static final String FIREBASE_URL_CARDS = FIREBASE_ROOT_URL + "/" + FIREBASE_LOCATION_CARDS;
+
+    public static final String KEY_USER_EMAIL = "email";
 }

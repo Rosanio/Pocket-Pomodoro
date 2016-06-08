@@ -62,6 +62,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
 
         createAuthProgressDialog();
+        String signUpEmail = mSharedPreferences.getString(Constants.KEY_USER_EMAIL, null);
+        if(signUpEmail != null) {
+            mEmailEditText.setText(signUpEmail);
+        }
     }
 
     @Override
@@ -78,7 +82,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void loginWithPassword() {
-        String email = mEmailEditText.getText().toString();
+        final String email = mEmailEditText.getText().toString();
         String password = mPasswordEditText.getText().toString();
 
         if(email.equals("")) {
@@ -96,6 +100,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onAuthenticated(AuthData authData) {
                 mAuthProgressDialog.dismiss();
+                mSharedPreferencesEditor.putString(Constants.KEY_USER_EMAIL, email).apply();
                 if(authData != null) {
                     String userUid = authData.getUid();
                     mSharedPreferencesEditor.putString(Constants.KEY_UID, userUid).apply();
@@ -108,6 +113,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onAuthenticationError(FirebaseError firebaseError) {
+                mAuthProgressDialog.dismiss();
                 switch(firebaseError.getCode()) {
                     case FirebaseError.INVALID_EMAIL:
                     case FirebaseError.USER_DOES_NOT_EXIST:
