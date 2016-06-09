@@ -1,10 +1,7 @@
 /*todo:
-    add progress dialog for login screen
-    implement other improvements to login screen
     possibly order decks by top rated (by default) and other options
     possibly categorize decks of cards
     incorporate timer
-    when enter key is pressed on study activity, automatically submit answer
     have keyboard push up all other elements of page
     possibly add animation
  */

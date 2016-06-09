@@ -79,8 +79,7 @@ public class SelectDeckActivity extends AppCompatActivity {
     }
 
     private void setUpFirebaseQuery() {
-        String location = mFirebaseDecksRef.toString();
-        mQuery = new Firebase(location);
+        mQuery = mFirebaseDecksRef.orderByChild("rating");
     }
 
     private void setUpRecyclerView() {
