@@ -55,16 +55,16 @@ public class DeckViewHolder extends RecyclerView.ViewHolder {
         String starString = new String(Character.toChars(starEmoji));
         String ratingString = starString;
         double rating = deck.getRating();
-        if(rating >= 1.50) {
+        if(rating <= -1.50) {
             ratingString += starString;
         }
-        if(rating >= 2.50) {
+        if(rating <= -2.50) {
             ratingString += starString;
         }
-        if(rating >= 3.50) {
+        if(rating <= -3.50) {
             ratingString += starString;
         }
-        if(rating >= 4.50) {
+        if(rating <= -4.50) {
             ratingString += starString;
         }
         if(rating == 0) {

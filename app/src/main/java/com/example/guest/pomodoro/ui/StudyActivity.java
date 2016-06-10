@@ -284,7 +284,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onFinishEditDialog(float rating) {
         Firebase deckUsersRatingRef = new Firebase(mDeckRatingRef + "/" + mUId);
-        deckUsersRatingRef.setValue(rating);
+        deckUsersRatingRef.setValue(-rating);
         Toast.makeText(StudyActivity.this, "You rated " + mDeck.getName() + " at " + rating + " stars.", Toast.LENGTH_SHORT).show();
     }
 
