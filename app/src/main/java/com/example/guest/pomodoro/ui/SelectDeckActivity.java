@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -41,8 +43,20 @@ public class SelectDeckActivity extends AppCompatActivity {
 
         ArrayAdapter spinnerAdapter = new ArrayAdapter(SelectDeckActivity.this, android.R.layout.simple_list_item_1, sortOptions);
         mSortOptionsSpinner.setAdapter(spinnerAdapter);
+        mSortOptionsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setUpFirebaseQuery(position);
+                setUpRecyclerView();
+            }
 
-        setUpFirebaseQuery();
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        setUpFirebaseQuery(0);
         setUpRecyclerView();
     }
 
@@ -78,8 +92,16 @@ public class SelectDeckActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setUpFirebaseQuery() {
-        mQuery = mFirebaseDecksRef.orderByChild("rating");
+    private void setUpFirebaseQuery(int selectedItemId) {
+        if(selectedItemId == 0) {
+            mQuery = mFirebaseDecksRef.orderByChild("rating");
+        } else if (selectedItemId == 1) {
+
+        } else if (selectedItemId == 2) {
+            mQuery = mFirebaseDecksRef.orderByChild("date");
+        } else if (selectedItemId == 3) {
+            mQuery = mFirebaseDecksRef.orderByChild("name");
+        }
     }
 
     private void setUpRecyclerView() {

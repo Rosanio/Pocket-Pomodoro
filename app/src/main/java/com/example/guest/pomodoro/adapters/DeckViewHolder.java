@@ -14,6 +14,7 @@ import com.example.guest.pomodoro.ui.StudyActivity;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -50,7 +51,7 @@ public class DeckViewHolder extends RecyclerView.ViewHolder {
     public void bindDeck(Deck deck) {
         mNameTextView.setText(deck.getName());
         mCategoryTextView.setText("Category: " + deck.getCategory());
-        mDateTextView.setText(deck.getDate().toString());
+        mDateTextView.setText((new Date(-deck.getDate())).toString());
         int starEmoji = 0x2B50;
         String starString = new String(Character.toChars(starEmoji));
         String ratingString = starString;

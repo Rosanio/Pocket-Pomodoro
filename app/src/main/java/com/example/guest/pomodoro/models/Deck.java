@@ -13,7 +13,7 @@ public class Deck {
     String name;
     String category;
     float rating;
-    Date date;
+    long date;
     String id;
 
     public Deck() {}
@@ -40,11 +40,11 @@ public class Deck {
         return rating;
     }
 
-    public Date getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(long date) {
         this.date = date;
     }
 

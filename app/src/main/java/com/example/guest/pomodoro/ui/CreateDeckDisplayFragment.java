@@ -94,7 +94,8 @@ public class CreateDeckDisplayFragment extends Fragment implements View.OnClickL
             Firebase newDeckRef = mDecksRef.push();
             String deckId = newDeckRef.getKey();
             newDeck.setId(deckId);
-            newDeck.setDate(new Date());
+            Date deckCreatedDate = new Date();
+            newDeck.setDate(-deckCreatedDate.getTime());
             newDeckRef.setValue(newDeck);
             Firebase deckCardsRef = mCardsRef.child(deckId);
             for(int i = 0; i < mCards.size(); i++) {
