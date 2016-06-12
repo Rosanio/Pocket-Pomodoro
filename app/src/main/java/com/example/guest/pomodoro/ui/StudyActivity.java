@@ -122,6 +122,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
         Intent intent = getIntent();
         mDeck = Parcels.unwrap(intent.getParcelableExtra("deck"));
+        Log.d("Times Completed Create", mDeck.getTimesCompleted()+"");
         mDeckRef = new Firebase(Constants.FIREBASE_URL_DECKS).child(mDeck.getId());
         mDeckCardsRef = new Firebase(Constants.FIREBASE_URL_CARDS).child(mDeck.getId());
         mDeckCardsRef.addValueEventListener(new ValueEventListener() {
@@ -226,8 +227,10 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
             case R.id.studyAgainButton:
+                Intent intent = new Intent(StudyActivity.this, StudyActivity.class);
+                intent.putExtra("deck", Parcels.wrap(mDeck));
                 finish();
-                startActivity(getIntent());
+                startActivity(intent);
                 break;
             case R.id.showAnswerButton:
                 if(!won) {
@@ -272,7 +275,8 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
             mShowAnswerButton.setText("Rate this Deck");
             int timesCompleted = mDeck.getTimesCompleted();
             Log.d("Times Completed", timesCompleted+"");
-            mDeckRef.child("timesCompleted").setValue(timesCompleted+1);
+            mDeckRef.child("timesCompleted").setValue(timesCompleted-1);
+            mDeck.setTimesCompleted(timesCompleted-1);
         } else {
             mCards.remove(mCard);
             int position = randomNumberGenerator.nextInt(mCards.size());

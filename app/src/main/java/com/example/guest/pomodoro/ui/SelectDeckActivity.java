@@ -97,7 +97,7 @@ public class SelectDeckActivity extends AppCompatActivity {
         if(selectedItemId == 0) {
             mQuery = mFirebaseDecksRef.orderByChild("rating");
         } else if (selectedItemId == 1) {
-
+            mQuery = mFirebaseDecksRef.orderByChild("timesCompleted");
         } else if (selectedItemId == 2) {
             mQuery = mFirebaseDecksRef.orderByChild("date");
         } else if (selectedItemId == 3) {

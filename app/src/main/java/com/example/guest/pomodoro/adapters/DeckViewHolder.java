@@ -74,7 +74,7 @@ public class DeckViewHolder extends RecyclerView.ViewHolder {
             mRatingTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         }
         mRatingTextView.setText(ratingString);
-        mTimesCompletedTextView.setText("Times Played: " + deck.getTimesCompleted());
+        mTimesCompletedTextView.setText("Times Played: " + -deck.getTimesCompleted());
     }
 
 }
