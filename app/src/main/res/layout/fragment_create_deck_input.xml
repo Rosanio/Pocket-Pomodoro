@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.example.guest.pomodoro.ui.CreateDeckInputFragment">
+    tools:context="com.epicodus.guest.pomodoro.ui.CreateDeckInputFragment">
 
     <ScrollView
         android:layout_width="match_parent"

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.guest.pomodoro.ui.SelectDeckActivity">
+    tools:context="com.epicodus.guest.pomodoro.ui.SelectDeckActivity">
 
     <LinearLayout
         android:orientation="horizontal"

@@ -38,14 +38,14 @@
 
         <fragment
             android:id="@+id/fragmentInput"
-            android:name="com.example.guest.pomodoro.ui.CreateDeckInputFragment"
+            android:name="com.epicodus.guest.pomodoro.ui.CreateDeckInputFragment"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             tools:layout="@layout/fragment_create_deck_input" />
 
         <fragment
             android:id="@+id/fragmentDisplay"
-            android:name="com.example.guest.pomodoro.ui.CreateDeckDisplayFragment"
+            android:name="com.epicodus.guest.pomodoro.ui.CreateDeckDisplayFragment"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             tools:layout="@layout/fragment_create_deck_display" />
