@@ -28,6 +28,7 @@ public class DeckViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.categoryTextView) TextView mCategoryTextView;
     @Bind(R.id.dateTextView) TextView mDateTextView;
     @Bind(R.id.ratingTextView) TextView mRatingTextView;
+    @Bind(R.id.timesCompletedTextView) TextView mTimesCompletedTextView;
 
     private Context mContext;
     private ArrayList<Deck> mDecks = new ArrayList<>();
@@ -73,6 +74,7 @@ public class DeckViewHolder extends RecyclerView.ViewHolder {
             mRatingTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         }
         mRatingTextView.setText(ratingString);
+        mTimesCompletedTextView.setText("Times Played: " + deck.getTimesCompleted());
     }
 
 }

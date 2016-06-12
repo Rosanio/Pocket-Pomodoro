@@ -29,9 +29,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class CreateDeckInputFragment extends Fragment implements View.OnClickListener {
     @Bind(R.id.questionEditText) EditText mQuestionEditText;
     @Bind(R.id.answerEditText) EditText mAnswerEditText;

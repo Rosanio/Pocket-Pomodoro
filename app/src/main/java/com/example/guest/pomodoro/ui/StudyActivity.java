@@ -68,6 +68,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     @Bind(R.id.showAnswerButton) Button mShowAnswerButton;
     @Bind(R.id.cardContainer) FrameLayout mCardContainer;
     private boolean won = false;
+    private Firebase mDeckRef;
     private Firebase mDeckCardsRef;
     private Firebase mDeckRatingRef;
     private SharedPreferences mSharedPreferences;
@@ -121,6 +122,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
         Intent intent = getIntent();
         mDeck = Parcels.unwrap(intent.getParcelableExtra("deck"));
+        mDeckRef = new Firebase(Constants.FIREBASE_URL_DECKS).child(mDeck.getId());
         mDeckCardsRef = new Firebase(Constants.FIREBASE_URL_CARDS).child(mDeck.getId());
         mDeckCardsRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -268,6 +270,9 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
             mStudyAgainButton.setVisibility(View.VISIBLE);
             mSubmitButton.setText("Study a New Deck");
             mShowAnswerButton.setText("Rate this Deck");
+            int timesCompleted = mDeck.getTimesCompleted();
+            Log.d("Times Completed", timesCompleted+"");
+            mDeckRef.child("timesCompleted").setValue(timesCompleted+1);
         } else {
             mCards.remove(mCard);
             int position = randomNumberGenerator.nextInt(mCards.size());

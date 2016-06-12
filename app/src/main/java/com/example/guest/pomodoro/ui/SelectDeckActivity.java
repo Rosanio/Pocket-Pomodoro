@@ -67,6 +67,7 @@ public class SelectDeckActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         MenuItem menuItem = menu.findItem(R.id.action_search);
+        Log.d("Menu Item", "it works");
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
