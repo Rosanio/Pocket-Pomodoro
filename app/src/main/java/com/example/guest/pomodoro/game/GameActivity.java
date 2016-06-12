@@ -1,11 +1,40 @@
+/*
+    todo:
+    POLISH
+
+    make points better
+    treasure chests
+    ideas for upgrades:
+      better weapons
+      weapon does more damage
+    move speed is slow at first, increases as you move
+    Make dolphins not overlap
+    scroll faster as player touches right side of screen
+*/
+
 package com.example.guest.pomodoro.game;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.graphics.Point;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
+
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.example.guest.pomodoro.models.Deck;
+import com.example.guest.pomodoro.ui.StudyActivity;
+
+import org.parceler.Parcels;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /*
 This is the entry point to the game.
@@ -19,7 +48,12 @@ public class GameActivity extends Activity {
     It will also hold the logic of the game
     and respond to screen touches as well
     */
-    HeadingAndRotationView view;
+    GameView view;
+    private Timer timer;
+    private TimerTask task;
+    private long startTime;
+    private long currentTime;
+    private Deck mDeck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +69,27 @@ public class GameActivity extends Activity {
         display.getSize(size);
 
         // Initialize gameView and set it as the view
-        view = new HeadingAndRotationView(this, size.x, size.y);
+        view = new GameView(this, size.x, size.y);
         setContentView(view);
+
+        mDeck = Parcels.unwrap(getIntent().getParcelableExtra("deck"));
+
+        startTime = System.currentTimeMillis();
+
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                currentTime = System.currentTimeMillis();
+                if(currentTime - startTime > 30000) {
+                    Intent intent = new Intent(GameActivity.this, StudyActivity.class);
+                    intent.putExtra("deck", Parcels.wrap(mDeck));
+                    startActivity(intent);
+                }
+            }
+        };
+
+        timer = new Timer();
+        timer.scheduleAtFixedRate(task, 0, 1000);
 
     }
 
@@ -56,5 +109,6 @@ public class GameActivity extends Activity {
 
         // Tell the gameView pause method to execute
         view.pause();
+        timer.cancel();
     }
 }

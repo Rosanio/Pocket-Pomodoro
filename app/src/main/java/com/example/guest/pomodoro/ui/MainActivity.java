@@ -11,7 +11,6 @@ package com.example.guest.pomodoro.ui;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 
 import com.example.guest.pomodoro.Constants;
 import com.example.guest.pomodoro.R;
-import com.example.guest.pomodoro.game.GameActivity;
 import com.firebase.client.Firebase;
 
 import butterknife.Bind;

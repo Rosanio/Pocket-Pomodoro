@@ -12,11 +12,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +23,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -36,6 +33,7 @@ import android.widget.Toast;
 
 import com.example.guest.pomodoro.Constants;
 import com.example.guest.pomodoro.R;
+import com.example.guest.pomodoro.game.GameActivity;
 import com.example.guest.pomodoro.models.Card;
 import com.example.guest.pomodoro.models.Deck;
 import com.firebase.client.DataSnapshot;
@@ -49,6 +47,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -76,6 +76,10 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     private Card mCard;
     private Random randomNumberGenerator;
     private int deckSize;
+    private Timer timer;
+    private TimerTask task;
+    private long currentTime;
+    private long startTime;
 
     private GestureDetectorCompat mDetector;
 
@@ -115,12 +119,15 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         ButterKnife.bind(this);
         setupUI(findViewById(R.id.parentContainer));
 
+        startTime = System.currentTimeMillis();
+
         randomNumberGenerator = new Random();
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mUId = mSharedPreferences.getString(Constants.KEY_UID, null);
 
         Intent intent = getIntent();
+        Log.d("intent", intent+"");
         mDeck = Parcels.unwrap(intent.getParcelableExtra("deck"));
         Log.d("Times Completed Create", mDeck.getTimesCompleted()+"");
         mDeckRef = new Firebase(Constants.FIREBASE_URL_DECKS).child(mDeck.getId());
@@ -203,6 +210,23 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                 return false;
             }
         });
+
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                currentTime = System.currentTimeMillis();
+                if(currentTime - startTime > 30000) {
+                    Intent intent = new Intent(StudyActivity.this, GameActivity.class);
+                    intent.putExtra("deck", Parcels.wrap(mDeck));
+                    finish();
+                    startActivity(intent);
+                }
+            }
+        };
+
+        timer = new Timer();
+
+        timer.scheduleAtFixedRate(task, 0, 1000);
     }
 
     private void createCardFragment(int position) {
@@ -313,5 +337,11 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
             }
             return true;
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        timer.cancel();
     }
 }
