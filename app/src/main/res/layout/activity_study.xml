@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.epicodus.pocketpomodoro.ui.StudyActivity"
+    android:id="@+id/parentContainer">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pointsLayout"
+        android:gravity="end">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:id="@+id/pointsTextView"
+            android:textStyle="bold"
+            android:textSize="30dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pointsLayout"
+        android:id="@+id/cardContainersLayout">
+
+        <FrameLayout
+            android:id="@+id/cardContainer"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@+id/pointsLayout">
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/submitAnswerLayout"
+        android:gravity="center"
+        android:paddingBottom="50dp"
+        android:layout_below="@+id/editTextLayout">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit Answer"
+            android:id="@+id/submitButton"
+            android:background="@color/colorPrimaryDark"
+            android:textSize="17sp"
+            android:textColor="@color/colorPrimaryLight"
+            android:padding="5dp"
+            android:layout_weight="0.5" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show Answer"
+            android:id="@+id/showAnswerButton"
+            android:layout_weight="0.5"
+            android:background="@color/colorPrimaryLight"
+            android:padding="5dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/resultsLayout"
+        android:layout_below="@+id/submitAnswerLayout"
+        android:gravity="center"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/resultsTextView"
+            android:textSize="25dp"
+            android:textColor="@color/colorSecondaryText"
+            android:layout_marginBottom="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/adjustPointsTextView"
+            android:textSize="22dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignTop="@+id/editTextLayout"
+        android:id="@+id/playAgainLayout">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Study this Deck Again"
+            android:id="@+id/studyAgainButton"
+            android:background="@color/colorAccent"
+            android:textColor="@color/colorPrimaryLight"
+            android:visibility="invisible"
+            android:padding="5dp"
+            android:layout_marginBottom="15dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextLayout"
+        android:gravity="center"
+        android:layout_below="@+id/cardContainersLayout">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/answerEditText"
+            android:hint="Your Answer"
+            android:layout_below="@+id/viewPager"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:gravity="center" />
+    </LinearLayout>
+
+</RelativeLayout>

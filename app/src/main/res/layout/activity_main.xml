@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="com.epicodus.pocketpomodoro.ui.MainActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:id="@+id/imageView"
+        android:src="@drawable/black_and_white_books"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/titleLayout"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pocket Pomodoro"
+            android:id="@+id/titleTextView"
+            android:textSize="30sp"
+            android:textColor="@color/colorPrimaryText"
+            android:layout_gravity="center"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/studyButtonLayout"
+        android:gravity="center"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start Studying!"
+            android:id="@+id/studyButton"
+            android:layout_gravity="bottom"
+            android:background="@color/colorAccent"
+            android:textColor="@color/colorPrimaryLight"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/studyButtonLayout"
+        android:id="@+id/deckButtonLayout">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Make a New Deck"
+            android:id="@+id/makeDeckButton"
+            android:layout_gravity="center_vertical"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/colorPrimaryLight"
+            android:textSize="18sp"
+            android:layout_marginBottom="2dp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email the creator of Pocket Pomodoro"
+        android:id="@+id/emailTextView"
+        android:drawableLeft="@drawable/ic_email_black_24dp"
+        android:drawablePadding="4dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:layout_above="@+id/deckButtonLayout"
+        android:textColor="@color/colorPrimaryText" />
+
+</RelativeLayout>
