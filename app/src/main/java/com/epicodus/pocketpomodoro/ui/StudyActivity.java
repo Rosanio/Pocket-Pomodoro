@@ -56,8 +56,7 @@ import butterknife.ButterKnife;
 public class StudyActivity extends AppCompatActivity implements View.OnClickListener, RateDeckFragment.RateDeckDialogListener {
 
     private Deck mDeck;
-    ArrayList<Card> mCards = new ArrayList<>();
-    ArrayList<String> answeredQuestions = new ArrayList<>();
+    ArrayList<Card> mCards;
     @Bind(R.id.pointsTextView) TextView mPointsTextView;
     @Bind(R.id.answerEditText) EditText mAnswerEditText;
     @Bind(R.id.submitButton) Button mSubmitButton;
@@ -75,7 +74,6 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     private String mUId;
     private Card mCard;
     private Random randomNumberGenerator;
-    private int deckSize;
     private Timer timer;
     private TimerTask task;
     private long currentTime;
@@ -131,6 +129,10 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         Intent intent = getIntent();
         Log.d("intent", intent+"");
         mDeck = Parcels.unwrap(intent.getParcelableExtra("deck"));
+        mCards = Parcels.unwrap(intent.getParcelableExtra("remainingCards"));
+        if(mCards == null) {
+            mCards = new ArrayList<>();
+        }
         Log.d("Times Completed Create", mDeck.getTimesCompleted()+"");
         mDeckRef = new Firebase(Constants.FIREBASE_URL_DECKS).child(mDeck.getId());
         mDeckCardsRef = new Firebase(Constants.FIREBASE_URL_CARDS).child(mDeck.getId());
@@ -140,15 +142,16 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                 Map cardsMap = (Map) snapshot.getValue();
 
                 if(cardsMap != null) {
-                    List cardsObjectList = new ArrayList<>(cardsMap.values());
-                    for(int i = 0; i < cardsObjectList.size(); i++) {
-                        Map thisCard = (Map) cardsObjectList.get(i);
-                        String cardQuestion = thisCard.get("question").toString();
-                        String cardAnswer = thisCard.get("answer").toString();
-                        Card newCard = new Card(cardQuestion, cardAnswer);
-                        mCards.add(newCard);
+                    if(mCards.size() == 0) {
+                        List cardsObjectList = new ArrayList<>(cardsMap.values());
+                        for(int i = 0; i < cardsObjectList.size(); i++) {
+                            Map thisCard = (Map) cardsObjectList.get(i);
+                            String cardQuestion = thisCard.get("question").toString();
+                            String cardAnswer = thisCard.get("answer").toString();
+                            Card newCard = new Card(cardQuestion, cardAnswer);
+                            mCards.add(newCard);
+                        }
                     }
-                    deckSize = mCards.size();
                     int position = randomNumberGenerator.nextInt(mCards.size());
                     createCardFragment(position);
 
@@ -218,12 +221,15 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void run() {
                 currentTime = System.currentTimeMillis();
-                if(currentTime - startTime > 30000) {
+                if(currentTime - startTime > 30000 && !won) {
                     toast.cancel();
                     Intent intent = new Intent(StudyActivity.this, GameActivity.class);
                     intent.putExtra("deck", Parcels.wrap(mDeck));
+                    intent.putExtra("remainingCards", Parcels.wrap(mCards));
                     finish();
                     startActivity(intent);
+                } else {
+                    timer.cancel();
                 }
             }
         };
@@ -284,7 +290,6 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         String answer = mAnswerEditText.getText().toString();
         if (answer.toLowerCase().trim().equals(mCard.getAnswer().toLowerCase().trim())) {
             Log.d("correct", mCard.getAnswer());
-            answeredQuestions.add(card.getQuestion());
             points += 2;
             mPointsTextView.setText(String.valueOf(points));
             mAdjustPointsTextView.setText("+2 points");
@@ -300,7 +305,9 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void checkWin() {
-        if(answeredQuestions.size()== deckSize) {
+        Log.d("deckSize", mCards.size()+"");
+        mCards.remove(mCard);
+        if(mCards.size()== 0) {
             won = true;
             mResultsTextView.setText("You've correctly guessed all questions!");
             mAdjustPointsTextView.setText("Final score: " + points);
@@ -313,7 +320,6 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
             mDeckRef.child("timesCompleted").setValue(timesCompleted-1);
             mDeck.setTimesCompleted(timesCompleted-1);
         } else {
-            mCards.remove(mCard);
             int position = randomNumberGenerator.nextInt(mCards.size());
             createCardFragment(position);
         }

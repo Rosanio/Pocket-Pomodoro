@@ -23,11 +23,13 @@ import android.content.Intent;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.epicodus.pocketpomodoro.models.Card;
 import com.epicodus.pocketpomodoro.models.Deck;
 import com.epicodus.pocketpomodoro.ui.StudyActivity;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -49,6 +51,7 @@ public class GameActivity extends Activity {
     private long startTime;
     private long currentTime;
     private Deck mDeck;
+    private ArrayList<Card> mCards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,7 @@ public class GameActivity extends Activity {
         setContentView(view);
 
         mDeck = Parcels.unwrap(getIntent().getParcelableExtra("deck"));
+        mCards = Parcels.unwrap(getIntent().getParcelableExtra("remainingCards"));
 
         startTime = System.currentTimeMillis();
 
@@ -78,7 +82,9 @@ public class GameActivity extends Activity {
                 if(currentTime - startTime > 30000) {
                     Intent intent = new Intent(GameActivity.this, StudyActivity.class);
                     intent.putExtra("deck", Parcels.wrap(mDeck));
+                    intent.putExtra("remainingCards", Parcels.wrap(mCards));
                     startActivity(intent);
+                    finish();
                 }
             }
         };

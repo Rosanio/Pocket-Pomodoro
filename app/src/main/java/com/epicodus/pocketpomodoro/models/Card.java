@@ -2,10 +2,6 @@ package com.epicodus.pocketpomodoro.models;
 
 import org.parceler.Parcel;
 
-/**
- * Created by Guest on 4/29/16.
- */
-
 @Parcel
 public class Card {
     String question;
