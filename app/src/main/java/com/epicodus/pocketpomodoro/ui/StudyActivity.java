@@ -82,6 +82,11 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     private AlertDialog alert;
     private Toast toast;
 
+    private int harpoonUpgrade;
+    private int oxygenUpgrade;
+    private int speedUpgrade;
+    private int lungsUpgrade;
+
     private GestureDetectorCompat mDetector;
 
     int points;
@@ -126,10 +131,15 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mUId = mSharedPreferences.getString(Constants.KEY_UID, null);
         toast = Toast.makeText(this, "hello", Toast.LENGTH_SHORT);
+
         Intent intent = getIntent();
-        Log.d("intent", intent+"");
         mDeck = Parcels.unwrap(intent.getParcelableExtra("deck"));
         mCards = Parcels.unwrap(intent.getParcelableExtra("remainingCards"));
+        harpoonUpgrade = intent.getIntExtra("harpoonUpgrade", 0);
+        oxygenUpgrade = intent.getIntExtra("oxygenUpgrade", 0);
+        speedUpgrade = intent.getIntExtra("speedUpgrade", 0);
+        lungsUpgrade = intent.getIntExtra("lungsUpgrade", 0);
+
         if(mCards == null) {
             mCards = new ArrayList<>();
         }
@@ -226,10 +236,12 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                     Intent intent = new Intent(StudyActivity.this, GameActivity.class);
                     intent.putExtra("deck", Parcels.wrap(mDeck));
                     intent.putExtra("remainingCards", Parcels.wrap(mCards));
+                    intent.putExtra("harpoonUpgrade", harpoonUpgrade);
+                    intent.putExtra("oxygenUpgrade", oxygenUpgrade);
+                    intent.putExtra("speedUpgrade", speedUpgrade);
+                    intent.putExtra("lungsUpgrade", lungsUpgrade);
                     finish();
                     startActivity(intent);
-                } else {
-                    timer.cancel();
                 }
             }
         };

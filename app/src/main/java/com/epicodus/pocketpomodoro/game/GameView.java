@@ -133,7 +133,7 @@ public class GameView extends SurfaceView implements Runnable {
     Random randomNumberGenerator;
     int harpoonCount;
 
-    public GameView(Context context, float x, float y) {
+    public GameView(Context context, float x, float y, int harpoonUpgrade, int oxygenUpgrade, int speedUpgrade, int lungsUpgrade) {
         super(context);
         mContext = context;
         gameState = GAME_START;
@@ -164,10 +164,10 @@ public class GameView extends SurfaceView implements Runnable {
         doneUpgradingWidth = 3*screenX/20;
 
         //Initialize upgrade values
-        harpoonUpgradeLevel = 0;
-        oxygenUpgradeLevel = 0;
-        speedUpgradeLevel = 0;
-        lungsUpgradeLevel = 0;
+        harpoonUpgradeLevel = harpoonUpgrade;
+        oxygenUpgradeLevel = oxygenUpgrade;
+        speedUpgradeLevel = speedUpgrade;
+        lungsUpgradeLevel = lungsUpgrade;
 
         //Initialize camera movement and spawn zone
         scrollSpeed = screenX/20;
@@ -190,12 +190,7 @@ public class GameView extends SurfaceView implements Runnable {
 
         harpoonCount = 0;
 
-        if(gameState == GAME_START && !babyMode) {
-            harpoonUpgradeLevel = 0;
-            oxygenUpgradeLevel = 0;
-            speedUpgradeLevel = 0;
-            lungsUpgradeLevel = 0;
-        } else if (babyMode) {
+        if (babyMode) {
             harpoonUpgradeLevel = 8;
             oxygenUpgradeLevel = 5;
             speedUpgradeLevel = 0;
@@ -801,6 +796,11 @@ public class GameView extends SurfaceView implements Runnable {
                 gameState = GAME_UPGRADING;
                 //Change to boat music (boat music lives in Touch Event
             }
+        } else if(gameState == GAME_OVER) {
+            harpoonUpgradeLevel = 0;
+            oxygenUpgradeLevel = 0;
+            speedUpgradeLevel = 0;
+            lungsUpgradeLevel = 0;
         }
     }
 
@@ -1298,5 +1298,16 @@ public class GameView extends SurfaceView implements Runnable {
 
         return true;
 
+    }
+
+    public int[] getUpgradeLevels() {
+        int[] upgradeLevels = {0,0,0,0};
+        if(!babyMode) {
+            upgradeLevels[0] = harpoonUpgradeLevel;
+            upgradeLevels[1] = oxygenUpgradeLevel;
+            upgradeLevels[2] = speedUpgradeLevel;
+            upgradeLevels[3] = lungsUpgradeLevel;
+        }
+        return upgradeLevels;
     }
 }

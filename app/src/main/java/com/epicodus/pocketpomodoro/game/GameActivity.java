@@ -17,6 +17,7 @@ package com.epicodus.pocketpomodoro.game;
 import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 
 import android.content.Intent;
@@ -52,6 +53,10 @@ public class GameActivity extends Activity {
     private long currentTime;
     private Deck mDeck;
     private ArrayList<Card> mCards;
+    private int harpoonUpgrade;
+    private int oxygenUpgrade;
+    private int speedUpgrade;
+    private int lungsUpgrade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +71,16 @@ public class GameActivity extends Activity {
         Point size = new Point();
         display.getSize(size);
 
-        // Initialize gameView and set it as the view
-        view = new GameView(this, size.x, size.y);
-        setContentView(view);
-
         mDeck = Parcels.unwrap(getIntent().getParcelableExtra("deck"));
         mCards = Parcels.unwrap(getIntent().getParcelableExtra("remainingCards"));
+        harpoonUpgrade = getIntent().getIntExtra("harpoonUpgrade", 0);
+        oxygenUpgrade = getIntent().getIntExtra("oxygenUpgrade", 0);
+        speedUpgrade = getIntent().getIntExtra("speedUpgrade", 0);
+        lungsUpgrade = getIntent().getIntExtra("lungsUpgrade", 0);
+
+        // Initialize gameView and set it as the view
+        view = new GameView(this, size.x, size.y, harpoonUpgrade, oxygenUpgrade, speedUpgrade, lungsUpgrade);
+        setContentView(view);
 
         startTime = System.currentTimeMillis();
 
@@ -80,9 +89,15 @@ public class GameActivity extends Activity {
             public void run() {
                 currentTime = System.currentTimeMillis();
                 if(currentTime - startTime > 30000) {
+                    int[] upgrades = view.getUpgradeLevels();
+                    Log.d("oxygenUpgrade", upgrades[1]+"");
                     Intent intent = new Intent(GameActivity.this, StudyActivity.class);
                     intent.putExtra("deck", Parcels.wrap(mDeck));
                     intent.putExtra("remainingCards", Parcels.wrap(mCards));
+                    intent.putExtra("harpoonUpgrade", upgrades[0]);
+                    intent.putExtra("oxygenUpgrade", upgrades[1]);
+                    intent.putExtra("speedUpgrade", upgrades[2]);
+                    intent.putExtra("lungsUpgrade", upgrades[3]);
                     startActivity(intent);
                     finish();
                 }
