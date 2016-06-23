@@ -7,12 +7,14 @@
 package com.epicodus.pocketpomodoro.ui;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -64,6 +66,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     @Bind(R.id.studyAgainButton) Button mStudyAgainButton;
     @Bind(R.id.showAnswerButton) Button mShowAnswerButton;
     @Bind(R.id.cardContainer) FrameLayout mCardContainer;
+    @Bind(R.id.helpTextView) TextView mHelpTextView;
     private boolean won = false;
     private Firebase mDeckRef;
     private Firebase mDeckCardsRef;
@@ -77,6 +80,9 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
     private TimerTask task;
     private long currentTime;
     private long startTime;
+
+    private AlertDialog alert;
+    private Toast toast;
 
     private GestureDetectorCompat mDetector;
 
@@ -121,7 +127,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mUId = mSharedPreferences.getString(Constants.KEY_UID, null);
-
+        toast = Toast.makeText(this, "hello", Toast.LENGTH_SHORT);
         Intent intent = getIntent();
         Log.d("intent", intent+"");
         mDeck = Parcels.unwrap(intent.getParcelableExtra("deck"));
@@ -192,6 +198,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         mSubmitButton.setOnClickListener(this);
         mStudyAgainButton.setOnClickListener(this);
         mShowAnswerButton.setOnClickListener(this);
+        mHelpTextView.setOnClickListener(this);
 
         mAnswerEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -212,6 +219,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
             public void run() {
                 currentTime = System.currentTimeMillis();
                 if(currentTime - startTime > 30000) {
+                    toast.cancel();
                     Intent intent = new Intent(StudyActivity.this, GameActivity.class);
                     intent.putExtra("deck", Parcels.wrap(mDeck));
                     finish();
@@ -223,6 +231,8 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         timer = new Timer();
 
         timer.scheduleAtFixedRate(task, 0, 1000);
+
+        setUpAlertDialog();
     }
 
     private void createCardFragment(int position) {
@@ -254,12 +264,17 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.showAnswerButton:
                 if(!won) {
-                    Toast.makeText(this, mCard.getAnswer(), Toast.LENGTH_LONG).show();
+                    toast.setText(mCard.getAnswer());
+                    toast.show();
                     points -= 2;
                     mPointsTextView.setText(String.valueOf(points));
                 } else {
                     showRateDeckDialog();
                 }
+                break;
+            case R.id.helpTextView:
+                Log.d("it", "works");
+                alert.show();
 
         }
 
@@ -267,7 +282,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
     public void guessAnswer(Card card) {
         String answer = mAnswerEditText.getText().toString();
-        if (answer.toLowerCase().equals(mCard.getAnswer().toLowerCase())) {
+        if (answer.toLowerCase().trim().equals(mCard.getAnswer().toLowerCase().trim())) {
             Log.d("correct", mCard.getAnswer());
             answeredQuestions.add(card.getQuestion());
             points += 2;
@@ -315,6 +330,16 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         Firebase deckUsersRatingRef = new Firebase(mDeckRatingRef + "/" + mUId);
         deckUsersRatingRef.setValue(-rating);
         Toast.makeText(StudyActivity.this, "You rated " + mDeck.getName() + " at " + rating + " stars.", Toast.LENGTH_SHORT).show();
+    }
+
+    public void setUpAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("How to Play:\n\nGuess the answer to the question and click enter.\n\nGuessing correctly earns you 2 points.\n\nGuessing incorrectly will lose you 1 point.\n\nYou can briefly display the answer for the cost of 2 points.\n\nSwipe the card to select a new card.")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {}
+                });
+        alert = builder.create();
     }
 
     class GestureListener extends GestureDetector.SimpleOnGestureListener {

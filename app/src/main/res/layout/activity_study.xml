@@ -83,7 +83,8 @@
         android:id="@+id/resultsLayout"
         android:layout_below="@+id/submitAnswerLayout"
         android:gravity="center"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="false"
+        android:layout_above="@+id/helpTextView">
 
         <TextView
             android:layout_width="wrap_content"
@@ -138,5 +139,14 @@
             android:inputType="text"
             android:gravity="center" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/helpTextView"
+        android:drawableRight="@drawable/ic_help_outline_black_24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentRight="true" />
 
 </RelativeLayout>
