@@ -19,6 +19,7 @@ import com.epicodus.pocketpomodoro.Constants;
 import com.epicodus.pocketpomodoro.R;
 import com.epicodus.pocketpomodoro.adapters.FirebaseDeckListAdapter;
 import com.epicodus.pocketpomodoro.models.Deck;
+import com.epicodus.pocketpomodoro.util.NpaLinearLayoutManager;
 import com.firebase.client.Firebase;
 import com.firebase.client.Query;
 
@@ -46,6 +47,7 @@ public class SelectDeckActivity extends AppCompatActivity {
         mSortOptionsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("position", position+"");
                 setUpFirebaseQuery(position);
                 setUpRecyclerView();
             }
@@ -107,7 +109,7 @@ public class SelectDeckActivity extends AppCompatActivity {
 
     private void setUpRecyclerView() {
         mAdapter = new FirebaseDeckListAdapter(mQuery, Deck.class);
-        mDecksRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mDecksRecyclerView.setLayoutManager(new NpaLinearLayoutManager(this));
         mDecksRecyclerView.setAdapter(mAdapter);
     }
 

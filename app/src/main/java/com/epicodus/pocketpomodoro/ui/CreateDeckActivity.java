@@ -1,5 +1,3 @@
-/*todo:
-*/
 
 package com.epicodus.pocketpomodoro.ui;
 

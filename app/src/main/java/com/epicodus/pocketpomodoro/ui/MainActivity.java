@@ -1,7 +1,6 @@
 /*todo:
     possibly categorize decks of cards
     have keyboard push up all other elements of page
-    possibly add animation
  */
 
 package com.epicodus.pocketpomodoro.ui;
