@@ -44,7 +44,7 @@
             android:text="Start Studying!"
             android:id="@+id/studyButton"
             android:layout_gravity="bottom"
-            android:background="@color/colorAccent"
+            android:background="@drawable/study_button"
             android:textColor="@color/colorPrimaryLight"
             android:textSize="18sp" />
 
@@ -63,7 +63,7 @@
             android:text="Make a New Deck"
             android:id="@+id/makeDeckButton"
             android:layout_gravity="center_vertical"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/make_deck_button"
             android:textColor="@color/colorPrimaryLight"
             android:textSize="18sp"
             android:layout_marginBottom="2dp" />

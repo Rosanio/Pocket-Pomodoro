@@ -30,7 +30,11 @@
             </intent-filter>
         </activity>
         <activity android:name="com.epicodus.pocketpomodoro.ui.CreateUserActivity" />
-        <activity android:name="com.epicodus.pocketpomodoro.ui.SelectDeckActivity"></activity>
+        <activity android:name="com.epicodus.pocketpomodoro.ui.SelectDeckActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.epicodus.pocketpomodoro.ui.MainActivity" />
+        </activity>
         <activity android:name="com.epicodus.pocketpomodoro.game.GameActivity"
             android:screenOrientation="landscape"/>
     </application>
