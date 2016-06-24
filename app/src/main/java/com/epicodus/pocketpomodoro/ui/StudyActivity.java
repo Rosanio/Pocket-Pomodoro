@@ -6,11 +6,13 @@
 
 package com.epicodus.pocketpomodoro.ui;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
@@ -89,6 +91,8 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
     private GestureDetectorCompat mDetector;
 
+    private View decorView;
+
     int points;
 
     public void hideKeyboard(Activity activity) {
@@ -100,10 +104,19 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         if (!(view instanceof EditText)) {
             view.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
+                    getSupportActionBar().show();
                     if(!won) {
                         hideKeyboard(StudyActivity.this);
                     }
                     findViewById(R.id.parentContainer).requestFocus();
+                    return false;
+                }
+            });
+        } else {
+            view.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    getSupportActionBar().hide();
                     return false;
                 }
             });
@@ -217,6 +230,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(EditorInfo.IME_ACTION_DONE == actionId) {
+                    getSupportActionBar().show();
                     if(!won) {
                         hideKeyboard(StudyActivity.this);
                         guessAnswer(mCard);
@@ -386,6 +400,12 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
             timer.schedule(cardAnimationTimerTask, 350);
             return true;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        getSupportActionBar().show();
     }
 
     @Override
