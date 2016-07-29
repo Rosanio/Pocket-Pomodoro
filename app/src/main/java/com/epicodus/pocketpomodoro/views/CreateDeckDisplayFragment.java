@@ -1,5 +1,6 @@
-package com.epicodus.pocketpomodoro.ui;
+//todo: move add deck functionality to presenter and check for connection before attempting to add a deck
 
+package com.epicodus.pocketpomodoro.views;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -106,6 +107,7 @@ public class CreateDeckDisplayFragment extends Fragment implements View.OnClickL
             }
             Intent intent = new Intent(getActivity(), MainActivity.class);
             startActivity(intent);
+            getActivity().finish();
         } else {
             Toast.makeText(getActivity(), "You need to name and categorize your deck", Toast.LENGTH_SHORT).show();
         }

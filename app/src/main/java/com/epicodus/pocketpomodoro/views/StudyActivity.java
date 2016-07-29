@@ -1,18 +1,16 @@
 /*todo:
-    add warnings for locking phone and how to use accents
     maybe prompt user for time to spend studying
     maybe just display option to study same deck if score is not high enough
+    break into fragments
  */
 
-package com.epicodus.pocketpomodoro.ui;
+package com.epicodus.pocketpomodoro.views;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
@@ -166,11 +164,9 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
                 if(cardsMap != null) {
                     if(mCards.size() == 0) {
-                        List cardsObjectList = new ArrayList<>(cardsMap.values());
-                        for(int i = 0; i < cardsObjectList.size(); i++) {
-                            Map thisCard = (Map) cardsObjectList.get(i);
-                            String cardQuestion = thisCard.get("question").toString();
-                            String cardAnswer = thisCard.get("answer").toString();
+                        for(DataSnapshot cardSnapshot : snapshot.getChildren()) {
+                            String cardQuestion = cardSnapshot.child("question").getValue().toString();
+                            String cardAnswer = cardSnapshot.child("answer").getValue().toString();
                             Card newCard = new Card(cardQuestion, cardAnswer);
                             mCards.add(newCard);
                         }

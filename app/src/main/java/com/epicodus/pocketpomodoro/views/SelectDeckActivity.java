@@ -1,9 +1,8 @@
-package com.epicodus.pocketpomodoro.ui;
+package com.epicodus.pocketpomodoro.views;
 
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;

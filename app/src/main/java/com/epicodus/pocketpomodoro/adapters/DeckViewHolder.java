@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.epicodus.pocketpomodoro.R;
 import com.epicodus.pocketpomodoro.models.Deck;
-import com.epicodus.pocketpomodoro.ui.StudyActivity;
+import com.epicodus.pocketpomodoro.views.StudyActivity;
 
 import org.parceler.Parcels;
 

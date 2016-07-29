@@ -1,4 +1,4 @@
-package com.epicodus.pocketpomodoro.ui;
+package com.epicodus.pocketpomodoro.views;
 
 
 import android.os.Bundle;

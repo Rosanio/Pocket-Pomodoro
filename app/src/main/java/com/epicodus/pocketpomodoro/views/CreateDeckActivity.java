@@ -1,5 +1,5 @@
 
-package com.epicodus.pocketpomodoro.ui;
+package com.epicodus.pocketpomodoro.views;
 
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;

@@ -1,5 +1,6 @@
-package com.epicodus.pocketpomodoro.ui;
+//todo: use RxJava to make api call and check network connection before making call
 
+package com.epicodus.pocketpomodoro.views;
 
 import android.content.Context;
 import android.os.Bundle;

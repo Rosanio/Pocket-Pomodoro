@@ -1,4 +1,6 @@
-package com.epicodus.pocketpomodoro.ui;
+//todo: Use RxJava here to make text change colors and check for internet connection before attempting login
+
+package com.epicodus.pocketpomodoro.views;
 
 import android.app.ProgressDialog;
 import android.content.Intent;

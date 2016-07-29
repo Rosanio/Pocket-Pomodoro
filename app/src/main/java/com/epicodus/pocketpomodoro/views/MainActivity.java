@@ -3,7 +3,7 @@
     have keyboard push up all other elements of page
  */
 
-package com.epicodus.pocketpomodoro.ui;
+package com.epicodus.pocketpomodoro.views;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -50,10 +50,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.makeDeckButton:
                 Intent studyIntent = new Intent(MainActivity.this, CreateDeckActivity.class);
                 startActivity(studyIntent);
+                finish();
                 break;
             case R.id.studyButton:
                 Intent gameIntent = new Intent(MainActivity.this, SelectDeckActivity.class);
                 startActivity(gameIntent);
+                finish();
                 break;
             case R.id.emailTextView:
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
