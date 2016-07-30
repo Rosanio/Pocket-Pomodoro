@@ -79,7 +79,11 @@ public class CreateUserFragment extends Fragment implements View.OnClickListener
                         case KeyEvent.KEYCODE_DPAD_CENTER:
                         case KeyEvent.KEYCODE_ENTER:
                             Log.d("it", "works");
-                            createNewUser();
+                            if(mCreateUserNavigationListener.checkNetworkConnection()) {
+                                createNewUser();
+                            } else {
+                                mCreateUserNavigationListener.showErrorToast("You are not connected to the internet");
+                            }
                             return true;
                     }
                 }
@@ -94,7 +98,11 @@ public class CreateUserFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View view) {
         if(view == mNewAccountButton) {
-            createNewUser();
+            if(mCreateUserNavigationListener.checkNetworkConnection()) {
+                createNewUser();
+            } else {
+                mCreateUserNavigationListener.showErrorToast("You are not connected to the internet");
+            }
         }
     }
 

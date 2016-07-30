@@ -9,4 +9,5 @@ public interface CreateUserNavigationListener {
     void showAuthProgressDialog();
     void hideAuthProgressDialog();
     void navigateToMainActivity();
+    boolean checkNetworkConnection();
 }
