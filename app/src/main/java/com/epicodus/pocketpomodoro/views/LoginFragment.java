@@ -49,6 +49,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private LoginNavigationListener mLoginNavigationListener;
 
     private Subscription mEmailEditTextSubscription;
+    private Subscription mPasswordEditTextSubscription;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -106,7 +107,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
          mEmailEditTextSubscription = RxTextView.textChanges(mEmailEditText)
                 .map(t -> emailPattern.matcher(t).matches())
                 .map(b -> b ? Color.BLACK : Color.RED)
-                .subscribe(color -> {mEmailEditText.setTextColor(color);Log.d("color", color.toString());});
+                .subscribe(color -> mEmailEditText.setTextColor(color));
+
+        if(mPasswordEditTextSubscription != null) {
+            mPasswordEditTextSubscription.unsubscribe();
+        }
+
+        mPasswordEditTextSubscription = RxTextView.textChanges(mPasswordEditText)
+                .map(t -> t.length() > 3)
+                .map(b -> b ? Color.BLACK : Color.RED)
+                .subscribe(color -> mPasswordEditText.setTextColor(color));
 
         return v;
     }
