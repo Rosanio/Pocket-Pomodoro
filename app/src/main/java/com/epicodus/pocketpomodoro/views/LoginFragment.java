@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,21 +22,14 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
-import java.util.regex.Pattern;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observable;
 import rx.Subscription;
 
 /**
  * Fragment for associated LoginActivity
  */
 public class LoginFragment extends Fragment implements View.OnClickListener {
-
-    final Pattern emailPattern = Pattern.compile(
-            "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-                    + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
 
     @Bind(R.id.logInEmailEditText) EditText mEmailEditText;
     @Bind(R.id.logInPasswordEditText) EditText mPasswordEditText;
@@ -105,7 +98,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
 
          mEmailEditTextSubscription = RxTextView.textChanges(mEmailEditText)
-                .map(t -> emailPattern.matcher(t).matches())
+                .map(t -> Patterns.EMAIL_ADDRESS.matcher(t).matches())
                 .map(b -> b ? Color.BLACK : Color.RED)
                 .subscribe(color -> mEmailEditText.setTextColor(color));
 

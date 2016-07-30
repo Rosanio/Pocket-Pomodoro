@@ -1,4 +1,3 @@
-//todo: Use RxJava here to make text change colors
 
 package com.epicodus.pocketpomodoro.views;
 

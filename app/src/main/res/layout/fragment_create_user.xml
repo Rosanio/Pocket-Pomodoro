@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.epicodus.pocketpomodoro.views.CreateUserFragment"
+    android:background = "@color/colorPrimary">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create a New Account"
+        android:id="@+id/textView2"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="30sp"
+        android:textColor="@color/colorTextWhite"
+        android:layout_marginBottom="60dp"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:background="@color/colorPrimaryLight"
+        android:padding="20dp">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nameEditText"
+            android:hint="Name"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/emailEditText"
+            android:hint="Email"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/passwordEditText"
+            android:hint="Password"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/confirmPasswordEditText"
+            android:hint="Confirm Password"
+            android:inputType="textPassword" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sign Up"
+        android:id="@+id/newAccountButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorTextWhite"
+        android:textSize="20sp"
+        android:layout_margin="16dp" />
+
+</RelativeLayout>
