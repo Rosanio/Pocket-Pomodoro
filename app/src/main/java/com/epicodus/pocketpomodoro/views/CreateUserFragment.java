@@ -4,10 +4,12 @@ package com.epicodus.pocketpomodoro.views;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,14 +23,16 @@ import com.epicodus.pocketpomodoro.models.User;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Subscription;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment associated with the CreateUserActivity
  */
 public class CreateUserFragment extends Fragment implements View.OnClickListener {
     public static final String TAG = CreateUserActivity.class.getSimpleName();
@@ -43,6 +47,10 @@ public class CreateUserFragment extends Fragment implements View.OnClickListener
     private Firebase mFirebaseRef;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mSharedPreferencesEditor;
+
+    private Subscription mEmailEditTextSubscription;
+    private Subscription mPasswordEditTextSubscription;
+    private Subscription mConfirmEditTextSubscription;
 
     private CreateUserNavigationListener mCreateUserNavigationListener;
     public CreateUserFragment() {
@@ -71,26 +79,49 @@ public class CreateUserFragment extends Fragment implements View.OnClickListener
         mSharedPreferencesEditor = mSharedPreferences.edit();
         mNewAccountButton.setOnClickListener(this);
 
-        mConfirmPasswordEditText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(event.getAction() == KeyEvent.ACTION_DOWN) {
-                    switch (keyCode) {
-                        case KeyEvent.KEYCODE_DPAD_CENTER:
-                        case KeyEvent.KEYCODE_ENTER:
-                            Log.d("it", "works");
-                            if(mCreateUserNavigationListener.checkNetworkConnection()) {
-                                createNewUser();
-                            } else {
-                                mCreateUserNavigationListener.showErrorToast("You are not connected to the internet");
-                            }
-                            return true;
-                    }
+        mConfirmPasswordEditText.setOnKeyListener((view, keyCode, event) -> {
+            if(event.getAction() == KeyEvent.ACTION_DOWN) {
+                switch (keyCode) {
+                    case KeyEvent.KEYCODE_DPAD_CENTER:
+                    case KeyEvent.KEYCODE_ENTER:
+                        if(mCreateUserNavigationListener.checkNetworkConnection()) {
+                            createNewUser();
+                        } else {
+                            mCreateUserNavigationListener.showErrorToast("You are not connected to the internet");
+                        }
+                        return true;
                 }
-                return false;
             }
+            return false;
         });
         mCreateUserNavigationListener.createAuthProgressDialog();
+
+        if(mEmailEditTextSubscription != null) {
+            mEmailEditTextSubscription.unsubscribe();
+        }
+
+        mEmailEditTextSubscription = RxTextView.textChanges(mEmailEditText)
+                .map(t -> Patterns.EMAIL_ADDRESS.matcher(t).matches())
+                .map(b -> b ? Color.BLACK : Color.RED)
+                .subscribe(color -> mEmailEditText.setTextColor(color));
+
+        if(mPasswordEditTextSubscription != null) {
+            mPasswordEditTextSubscription.unsubscribe();
+        }
+
+        mPasswordEditTextSubscription = RxTextView.textChanges(mPasswordEditText)
+                .map(t -> t.length() > 4)
+                .map(b -> b ? Color.BLACK : Color.RED)
+                .subscribe(color -> mPasswordEditText.setTextColor(color));
+
+        if(mConfirmEditTextSubscription != null) {
+            mConfirmEditTextSubscription.unsubscribe();
+        }
+
+        mConfirmEditTextSubscription = RxTextView.textChanges(mConfirmPasswordEditText)
+                .map(t -> t.toString().equals(mPasswordEditText.getText().toString()))
+                .map(b -> b ? Color.BLACK : Color.RED)
+                .subscribe(color -> mConfirmPasswordEditText.setTextColor(color));
 
         return v;
     }

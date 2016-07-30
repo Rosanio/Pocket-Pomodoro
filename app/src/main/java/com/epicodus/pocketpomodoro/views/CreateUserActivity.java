@@ -1,4 +1,4 @@
-//todo: Use RxJava here to make text change colors and check for internet connection before attempting login
+//todo: Use RxJava here to make text change colors
 
 package com.epicodus.pocketpomodoro.views;
 
