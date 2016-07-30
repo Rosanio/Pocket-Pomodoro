@@ -1,15 +1,12 @@
 package com.epicodus.pocketpomodoro.views;
 
-
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,21 +14,29 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.epicodus.pocketpomodoro.Constants;
 import com.epicodus.pocketpomodoro.R;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.jakewharton.rxbinding.widget.RxTextView;
+
+import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscription;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment for associated LoginActivity
  */
 public class LoginFragment extends Fragment implements View.OnClickListener {
+
+    final Pattern emailPattern = Pattern.compile(
+            "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                    + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
 
     @Bind(R.id.logInEmailEditText) EditText mEmailEditText;
     @Bind(R.id.logInPasswordEditText) EditText mPasswordEditText;
@@ -39,11 +44,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Bind(R.id.signUpTextView) TextView mSignUpTextView;
 
     private Firebase mFirebaseRef;
-    private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mSharedPreferencesEditor;
 
-
     private LoginNavigationListener mLoginNavigationListener;
+
+    private Subscription mEmailEditTextSubscription;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -66,7 +71,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, v);
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mSharedPreferencesEditor = mSharedPreferences.edit();
         mFirebaseRef = new Firebase(Constants.FIREBASE_ROOT_URL);
 
@@ -93,6 +98,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         if(signUpEmail != null) {
             mEmailEditText.setText(signUpEmail);
         }
+
+        if(mEmailEditTextSubscription != null) {
+            mEmailEditTextSubscription.unsubscribe();
+        }
+
+         mEmailEditTextSubscription = RxTextView.textChanges(mEmailEditText)
+                .map(t -> emailPattern.matcher(t).matches())
+                .map(b -> b ? Color.BLACK : Color.RED)
+                .subscribe(color -> {mEmailEditText.setTextColor(color);Log.d("color", color.toString());});
+
         return v;
     }
 
