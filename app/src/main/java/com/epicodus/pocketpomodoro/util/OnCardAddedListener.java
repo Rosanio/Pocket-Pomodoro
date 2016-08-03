@@ -9,4 +9,5 @@ import java.util.ArrayList;
  */
 public interface OnCardAddedListener {
     void onCardAdded(ArrayList<Card> cards);
+    boolean checkNetworkConnection();
 }

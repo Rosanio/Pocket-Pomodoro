@@ -2,6 +2,9 @@
 package com.epicodus.pocketpomodoro.views;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -31,12 +34,10 @@ public class CreateDeckActivity extends AppCompatActivity implements OnCardAdded
 
     public void setupUI(View view) {
         if(!(view instanceof EditText || view instanceof Button)) {
-            view.setOnTouchListener(new View.OnTouchListener() {
-                public boolean onTouch(View v, MotionEvent event) {
-                    hideKeyboard(CreateDeckActivity.this);
-                    findViewById(R.id.parentContainer).requestFocus();
-                    return false;
-                }
+            view.setOnTouchListener((v, event) -> {
+                hideKeyboard(CreateDeckActivity.this);
+                findViewById(R.id.parentContainer).requestFocus();
+                return false;
             });
         }
 
@@ -82,5 +83,12 @@ public class CreateDeckActivity extends AppCompatActivity implements OnCardAdded
             outState.putParcelable("cards", Parcels.wrap(mCards));
         }
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean checkNetworkConnection() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

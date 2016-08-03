@@ -112,7 +112,11 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
                 String text = mQuestionEditText.getText().toString();
 
                 if(mPresenter.checkQuestionValidity(text, null)) {
-                    mPresenter.translateQuestion(language, text);
+                    if(mOnCardAddedListener.checkNetworkConnection()) {
+                        mPresenter.translateQuestion(language, text);
+                    } else {
+                        makeErrorToast("You are not connected to the internet");
+                    }
                 }
 
                 mQuestionEditText.setText("");
