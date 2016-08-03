@@ -1,4 +1,4 @@
-//todo: use RxJava to make api call and check network connection before making call
+//todo: use RxJava to make api call
 
 package com.epicodus.pocketpomodoro.views;
 
@@ -20,17 +20,12 @@ import com.epicodus.pocketpomodoro.R;
 import com.epicodus.pocketpomodoro.contracts.CreateDeckInputContract;
 import com.epicodus.pocketpomodoro.models.Card;
 import com.epicodus.pocketpomodoro.presenters.CreateDeckInputPresenter;
-import com.epicodus.pocketpomodoro.services.YandexService;
 import com.epicodus.pocketpomodoro.util.OnCardAddedListener;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class CreateDeckInputFragment extends Fragment implements View.OnClickListener, CreateDeckInputContract.View {
     @Bind(R.id.questionEditText) EditText mQuestionEditText;

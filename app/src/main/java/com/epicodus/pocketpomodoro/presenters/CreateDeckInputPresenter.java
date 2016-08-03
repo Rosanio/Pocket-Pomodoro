@@ -2,16 +2,21 @@ package com.epicodus.pocketpomodoro.presenters;
 
 import android.support.annotation.Nullable;
 
+import com.epicodus.pocketpomodoro.Constants;
 import com.epicodus.pocketpomodoro.contracts.CreateDeckInputContract;
 import com.epicodus.pocketpomodoro.models.Card;
-import com.epicodus.pocketpomodoro.services.YandexService;
+import com.epicodus.pocketpomodoro.models.Translation;
+import com.epicodus.pocketpomodoro.models.TranslationService;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
+import retrofit.GsonConverterFactory;
+import retrofit.Retrofit;
+import retrofit.RxJavaCallAdapterFactory;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Presenter associated with CreateDeckInputFragment
@@ -19,6 +24,8 @@ import okhttp3.Response;
 public class CreateDeckInputPresenter implements CreateDeckInputContract.Presenter {
     private ArrayList<Card> mCards = new ArrayList<>();
     private CreateDeckInputContract.View mView;
+    private Subscription mSubscription;
+    private Card mTranslatedCard;
 
     public CreateDeckInputPresenter(CreateDeckInputContract.View view) {
         mView = view;
@@ -29,21 +36,41 @@ public class CreateDeckInputPresenter implements CreateDeckInputContract.Present
 
     public void translateQuestion(String language, String question) {
         mView.setTextTranslate();
-        final YandexService yandexService = new YandexService();
         final String text = question;
 
-        yandexService.translateText(text, language, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
+        if(mSubscription != null) {
+            mSubscription.unsubscribe();
+        }
 
-            @Override
-            public void onResponse(Call call, Response response) {
-                mCards = yandexService.processResults(mCards, question, response);
-                mView.addCards(mCards);
-            }
-        });
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.YANDEX_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+
+        TranslationService translationService = retrofit.create(TranslationService.class);
+
+        mSubscription = translationService.translate(Constants.YANDEX_API_KEY, language, question)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Translation>() {
+                    @Override
+                    public void onCompleted() {
+                        mCards.add(mTranslatedCard);
+                        mView.addCards(mCards);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Translation translation) {
+                        CreateDeckInputPresenter.this.mTranslatedCard = new Card(text, translation.getText().get(0));
+                    }
+                });
+
     }
 
     public boolean checkQuestionValidity(String question, @Nullable String answer) {
