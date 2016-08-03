@@ -17,7 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.epicodus.pocketpomodoro.R;
+import com.epicodus.pocketpomodoro.contracts.CreateDeckInputContract;
 import com.epicodus.pocketpomodoro.models.Card;
+import com.epicodus.pocketpomodoro.presenters.CreateDeckInputPresenter;
 import com.epicodus.pocketpomodoro.services.YandexService;
 import com.epicodus.pocketpomodoro.util.OnCardAddedListener;
 
@@ -30,7 +32,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class CreateDeckInputFragment extends Fragment implements View.OnClickListener {
+public class CreateDeckInputFragment extends Fragment implements View.OnClickListener, CreateDeckInputContract.View {
     @Bind(R.id.questionEditText) EditText mQuestionEditText;
     @Bind(R.id.answerEditText) EditText mAnswerEditText;
     @Bind(R.id.addCardButton) Button mAddCardButton;
@@ -38,8 +40,8 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
     @Bind(R.id.translateQuestionButton) Button mTranslateQuestionButton;
     @Bind(R.id.loadingTextView) TextView mLoadingTextView;
     String[] languages = {"Spanish", "French", "German", "Italian"};
-    ArrayList<Card> mCards = new ArrayList<>();
     OnCardAddedListener mOnCardAddedListener;
+    CreateDeckInputContract.Presenter mPresenter;
 
     public CreateDeckInputFragment() {
         // Required empty public constructor
@@ -70,34 +72,30 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
         mAddCardButton.setOnClickListener(this);
         mTranslateQuestionButton.setOnClickListener(this);
 
-        mQuestionEditText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(event.getAction() == KeyEvent.ACTION_DOWN) {
-                    switch(keyCode) {
-                        case KeyEvent.KEYCODE_DPAD_CENTER:
-                        case KeyEvent.KEYCODE_ENTER:
-                            mAnswerEditText.requestFocus();
-                            return true;
-                    }
+        mQuestionEditText.setOnKeyListener((v, keyCode, event) -> {
+            if(event.getAction() == KeyEvent.ACTION_DOWN) {
+                switch(keyCode) {
+                    case KeyEvent.KEYCODE_DPAD_CENTER:
+                    case KeyEvent.KEYCODE_ENTER:
+                        mAnswerEditText.requestFocus();
+                        return true;
                 }
-                return false;
             }
+            return false;
         });
-        mAnswerEditText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    switch (keyCode) {
-                        case KeyEvent.KEYCODE_DPAD_CENTER:
-                        case KeyEvent.KEYCODE_ENTER:
-                            addCard();
-                            return true;
-                    }
+        mAnswerEditText.setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                switch (keyCode) {
+                    case KeyEvent.KEYCODE_DPAD_CENTER:
+                    case KeyEvent.KEYCODE_ENTER:
+                        addCard();
+                        return true;
                 }
-                return false;
             }
+            return false;
         });
+
+        mPresenter = new CreateDeckInputPresenter(this);
 
         return view;
     }
@@ -112,27 +110,11 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
             case R.id.translateQuestionButton:
                 String language = mLanguageSpinner.getSelectedItem().toString();
                 String text = mQuestionEditText.getText().toString();
-                if(text.length() > 0) {
-                    if(mCards.size() == 0) {
-                        mLoadingTextView.setText("translating...");
-                        translateText(text, language);
-                    } else {
-                        Boolean contains = false;
-                        for(int i = 0; i < mCards.size(); i++) {
-                            if(mCards.get(i).getQuestion().equals(text)) {
-                                contains = true;
-                            }
-                        }
-                        if(!contains) {
-                            mLoadingTextView.setText("translating...");
-                            translateText(text, language);
-                        } else {
-                            Toast.makeText(getActivity(), "This question has already been added", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                } else {
-                    Toast.makeText(getActivity(), "Please fill out question form", Toast.LENGTH_LONG).show();
+
+                if(mPresenter.checkQuestionValidity(text, null)) {
+                    mPresenter.translateQuestion(language, text);
                 }
+
                 mQuestionEditText.setText("");
                 mAnswerEditText.setText("");
                 mQuestionEditText.requestFocus();
@@ -140,73 +122,47 @@ public class CreateDeckInputFragment extends Fragment implements View.OnClickLis
         }
     }
 
-    private void translateText(String text, String language) {
-        final YandexService yandexService = new YandexService();
-        final String question = text;
-
-        yandexService.translateText(text, language, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                mCards = yandexService.processResults(mCards, question, response);
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //This method refers to the overwritten onCardAdded method in CreateDeckActivity, meaning the value of mCards in that activity will be replaced with the value cards being passed into this method.
-                        mOnCardAddedListener.onCardAdded(mCards);
-                        mLoadingTextView.setText("");
-                    }
-                });
-
-            }
-        });
-    }
-
     public void setCards(ArrayList<Card> cards) {
-        mCards = cards;
+        if(mPresenter == null) {
+            mPresenter = new CreateDeckInputPresenter(this);
+        }
+        mPresenter.setCards(cards);
     }
 
     public void addCard() {
         String question = mQuestionEditText.getText().toString();
         String answer = mAnswerEditText.getText().toString();
-        if (question.length() > 0 && answer.length() > 0) {
-            if(mCards == null) {
-                mCards = new ArrayList<>();
-            }
-
-            if (mCards.size() == 0) {
-                Card card = new Card(question, answer);
-                mCards.add(card);
-                //This method refers to the overwritten onCardAdded method in CreateDeckActivity, meaning the value of mCards in that activity will be replaced with the value cards being passed into this method.
-                mOnCardAddedListener.onCardAdded(mCards);
-            } else {
-                Boolean contains = false;
-                for (int i = 0; i < mCards.size(); i++) {
-                    if (mCards.get(i).getQuestion().equals(question)) {
-                        contains = true;
-                    }
-                }
-                if (!contains) {
-                    Card card = new Card(question, answer);
-                    mCards.add(card);
-                    //This method refers to the overwritten onCardAdded method in CreateDeckActivity, meaning the value of mCards in that activity will be replaced with the value cards being passed into this method.
-                    mOnCardAddedListener.onCardAdded(mCards);
-                } else {
-                    Toast.makeText(getActivity(), "This question has already been added", Toast.LENGTH_LONG).show();
-                }
-            }
-        } else {
-            Toast.makeText(getActivity(), "Please fill out both question and answer forms", Toast.LENGTH_LONG).show();
+        if(mPresenter.checkQuestionValidity(question, answer)) {
+            mPresenter.addCard(question, answer);
         }
 
         mQuestionEditText.setText("");
         mAnswerEditText.setText("");
         mQuestionEditText.requestFocus();
+    }
+
+    public void setTextTranslate() {
+        mLoadingTextView.setText("translating...");
+    }
+
+    public void unsetTextTranslate() {
+        mLoadingTextView.setText("");
+    }
+
+    public void makeErrorToast(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+    }
+
+    public void addCards(ArrayList<Card> cards) {
+        getActivity().runOnUiThread(() -> {
+            mOnCardAddedListener.onCardAdded(cards);
+            unsetTextTranslate();
+            informActivity(cards);
+        });
+    }
+
+    public void informActivity(ArrayList<Card> cards) {
+        mOnCardAddedListener.onCardAdded(cards);
     }
 
 }

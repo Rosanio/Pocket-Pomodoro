@@ -1,5 +1,3 @@
-//todo: Use RxJava here to make text change colors
-
 package com.epicodus.pocketpomodoro.views;
 
 import android.app.ProgressDialog;
