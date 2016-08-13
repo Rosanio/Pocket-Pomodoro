@@ -2,6 +2,7 @@
 
 package com.epicodus.pocketpomodoro.views;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import com.epicodus.pocketpomodoro.adapters.CardListAdapter;
 import com.epicodus.pocketpomodoro.contracts.CreateDeckDisplayContract;
 import com.epicodus.pocketpomodoro.models.Card;
 import com.epicodus.pocketpomodoro.presenters.CreateDeckDisplayPresenter;
+import com.epicodus.pocketpomodoro.util.OnCardAddedListener;
 
 import java.util.ArrayList;
 
@@ -38,9 +40,21 @@ public class CreateDeckDisplayFragment extends Fragment implements View.OnClickL
 
     CardListAdapter adapter;
     private CreateDeckDisplayContract.Presenter mPresenter;
+    OnCardAddedListener mOnCardAddedListener;
 
     public CreateDeckDisplayFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    //called as soon as a fragment is attached to an activity
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mOnCardAddedListener = (OnCardAddedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + e.getMessage());
+        }
     }
 
 
@@ -79,7 +93,12 @@ public class CreateDeckDisplayFragment extends Fragment implements View.OnClickL
 
     @Override
     public void onFinishEditDialog(String nameText, String categoryText) {
-        mPresenter.createDeck(nameText, categoryText);
+        if(mOnCardAddedListener.checkNetworkConnection()) {
+            mPresenter.createDeck(nameText, categoryText);
+        } else {
+            makeErrorToast("You must be connected to the internet");
+        }
+
     }
 
     public void showNewDeckDialog() {
