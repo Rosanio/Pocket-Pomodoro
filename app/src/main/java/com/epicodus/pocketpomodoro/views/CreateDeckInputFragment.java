@@ -1,5 +1,3 @@
-//todo: use RxJava to make api call
-
 package com.epicodus.pocketpomodoro.views;
 
 import android.content.Context;
