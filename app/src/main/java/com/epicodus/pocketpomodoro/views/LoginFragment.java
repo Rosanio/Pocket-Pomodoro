@@ -3,6 +3,7 @@ package com.epicodus.pocketpomodoro.views;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -111,6 +112,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 .map(b -> b ? Color.BLACK : Color.RED)
                 .subscribe(color -> mPasswordEditText.setTextColor(color));
 
+        mSignUpTextView.setPaintFlags(mSignUpTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         return v;
     }
 

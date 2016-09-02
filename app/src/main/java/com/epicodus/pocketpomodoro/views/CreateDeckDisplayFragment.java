@@ -1,5 +1,3 @@
-//todo: move add deck functionality to presenter and check for connection before attempting to add a deck
-
 package com.epicodus.pocketpomodoro.views;
 
 import android.content.Context;

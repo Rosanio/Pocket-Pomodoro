@@ -89,8 +89,6 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
     private GestureDetectorCompat mDetector;
 
-    private View decorView;
-
     int points;
 
     public void hideKeyboard(Activity activity) {

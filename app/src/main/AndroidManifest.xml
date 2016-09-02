@@ -32,7 +32,11 @@
             </intent-filter>
         </activity>
         <activity android:name="com.epicodus.pocketpomodoro.views.CreateUserActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.epicodus.pocketpomodoro.views.LoginActivity"/>
+        </activity>
         <activity android:name="com.epicodus.pocketpomodoro.views.SelectDeckActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
