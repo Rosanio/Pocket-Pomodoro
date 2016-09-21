@@ -14,7 +14,7 @@ public interface CreateDeckDisplayContract {
     }
 
     interface Presenter {
-        void createDeck(String name, String category);
+        void createDeck(String name, String category, String uid);
         ArrayList<Card> getCards();
         void updateCards(ArrayList<Card> cards);
     }

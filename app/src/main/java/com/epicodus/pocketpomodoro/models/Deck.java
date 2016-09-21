@@ -8,61 +8,67 @@ import org.parceler.Parcel;
 @Parcel
 public class Deck {
 
-    String name;
-    String category;
-    float rating;
+    String mName;
+    String mCategory;
+    float mRating;
     //date is saved as a long so that it will display by most recent on select deck screen, but can still be displayed property to the user
-    long date;
-    String id;
-    int timesCompleted;
+    long mDate;
+    String mId;
+    String mCreatorId;
+    int mTimesCompleted;
 
     public Deck() {}
 
-    public Deck(String name, String category) {
-        this.name = name;
-        this.category = category;
-        this.rating = 0;
-        this.timesCompleted = 0;
+    public Deck(String name, String category, String creatorId) {
+        mName = name;
+        mCategory = category;
+        mCreatorId = creatorId;
+        mRating = 0;
+        mTimesCompleted = 0;
     }
 
     public String getId() {
-        return id;
+        return mId;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public String getCategory() {
-        return category;
+        return mCategory;
     }
 
     public float getRating() {
-        return rating;
+        return mRating;
     }
 
     public long getDate() {
-        return date;
+        return mDate;
     }
 
     public int getTimesCompleted() {
-        return timesCompleted;
+        return mTimesCompleted;
+    }
+
+    public String getCreeatorId() {
+        return mCreatorId;
     }
 
     public void setTimesCompleted(int timesCompleted) {
-        this.timesCompleted = timesCompleted;
+        mTimesCompleted = timesCompleted;
     }
 
     public void setDate(long date) {
-        this.date = date;
+        mDate = date;
     }
 
     public void setId(String id) {
-        this.id = id;
+        mId = id;
     }
 
     public void setRating(float rating) {
-        this.rating = rating;
+        mRating = rating;
     }
 
 }

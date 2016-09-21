@@ -1,5 +1,7 @@
 package com.epicodus.pocketpomodoro.views;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,12 +34,16 @@ public class SelectDeckActivity extends AppCompatActivity {
     private Query mQuery;
     private Firebase mFirebaseDecksRef;
     private FirebaseDeckListAdapter mAdapter;
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_deck);
         ButterKnife.bind(this);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        uid = sharedPreferences.getString(Constants.KEY_UID, "");
 
         mFirebaseDecksRef = new Firebase(Constants.FIREBASE_URL_DECKS);
 
@@ -76,7 +82,7 @@ public class SelectDeckActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 //submit query to firebase to return decks which match this name
                 String firstLetter = query.substring(0, 1).toUpperCase();
-                mQuery = new Firebase(Constants.FIREBASE_URL_DECKS).orderByChild("name").startAt(query.toUpperCase()).endAt(firstLetter+"\uf8ff");
+                mQuery = new Firebase(Constants.FIREBASE_URL_DECKS).child(uid).orderByChild("name").startAt(query.toUpperCase()).endAt(firstLetter+"\uf8ff");
                 setUpRecyclerView();
                 return false;
             }
