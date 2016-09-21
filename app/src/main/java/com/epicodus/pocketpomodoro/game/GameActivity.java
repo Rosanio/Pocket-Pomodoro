@@ -88,7 +88,7 @@ public class GameActivity extends Activity {
             @Override
             public void run() {
                 currentTime = System.currentTimeMillis();
-                if(currentTime - startTime > 30000) {
+                if(currentTime - startTime > (60000*5)) {
                     int[] upgrades = view.getUpgradeLevels();
                     Log.d("oxygenUpgrade", upgrades[1]+"");
                     Intent intent = new Intent(GameActivity.this, StudyActivity.class);

@@ -227,7 +227,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
                     getSupportActionBar().show();
                     if(!won) {
                         hideKeyboard(StudyActivity.this);
-                        guessAnswer(mCard);
+                        guessAnswer();
                         return true;
                     }
                 }
@@ -239,7 +239,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void run() {
                 currentTime = System.currentTimeMillis();
-                if(currentTime - startTime > 30000 && !won) {
+                if(currentTime - startTime > (60000*25) && !won) {
                     toast.cancel();
                     Intent intent = new Intent(StudyActivity.this, GameActivity.class);
                     intent.putExtra("deck", Parcels.wrap(mDeck));
@@ -275,7 +275,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.submitButton:
                 if(!won) {
-                    guessAnswer(mCard);
+                    guessAnswer();
                 } else {
                     Intent intent = new Intent(StudyActivity.this, SelectDeckActivity.class);
                     startActivity(intent);
@@ -306,7 +306,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    public void guessAnswer(Card card) {
+    public void guessAnswer() {
         String answer = mAnswerEditText.getText().toString();
         if (answer.toLowerCase().trim().equals(mCard.getAnswer().toLowerCase().trim())) {
             Log.d("correct", mCard.getAnswer());

@@ -3,27 +3,29 @@
     package="com.epicodus.pocketpomodoro">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name="com.epicodus.pocketpomodoro.PocketPomodoroApplication"
+        android:name=".PocketPomodoroApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.epicodus.pocketpomodoro.views.MainActivity" />
+        <activity android:name=".views.MainActivity" />
         <activity
-            android:name="com.epicodus.pocketpomodoro.views.CreateDeckActivity"
+            android:name=".views.CreateDeckActivity"
             android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.epicodus.pocketpomodoro.views.MainActivity" />
         </activity>
-        <activity android:name="com.epicodus.pocketpomodoro.views.StudyActivity"
+        <activity
+            android:name=".views.StudyActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name="com.epicodus.pocketpomodoro.views.LoginActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".views.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />
@@ -31,19 +33,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.epicodus.pocketpomodoro.views.CreateUserActivity"
+        <activity
+            android:name=".views.CreateUserActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.epicodus.pocketpomodoro.views.LoginActivity"/>
+                android:value="com.epicodus.pocketpomodoro.views.LoginActivity" />
         </activity>
-        <activity android:name="com.epicodus.pocketpomodoro.views.SelectDeckActivity">
+        <activity android:name=".views.SelectDeckActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.epicodus.pocketpomodoro.views.MainActivity" />
         </activity>
-        <activity android:name="com.epicodus.pocketpomodoro.game.GameActivity"
-            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".game.GameActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".views.MyDecksActivity"
+            android:screenOrientation="landscape">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.epicodus.pocketpomodoro.views.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

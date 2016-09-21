@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/view_my_decks"
+        android:title="My Decks"
+        android:visible="true"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_logout"
         android:title="Logout"
         android:visible="true"

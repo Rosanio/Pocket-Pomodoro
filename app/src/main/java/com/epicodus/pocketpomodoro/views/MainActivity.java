@@ -50,12 +50,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.makeDeckButton:
                 Intent studyIntent = new Intent(MainActivity.this, CreateDeckActivity.class);
                 startActivity(studyIntent);
-                finish();
                 break;
             case R.id.studyButton:
                 Intent gameIntent = new Intent(MainActivity.this, SelectDeckActivity.class);
                 startActivity(gameIntent);
-                finish();
                 break;
             case R.id.emailTextView:
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
@@ -79,6 +77,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(id == R.id.action_logout) {
             logout();
             return true;
+        } else if(id == R.id.view_my_decks) {
+            Intent intent = new Intent(MainActivity.this, MyDecksActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
