@@ -2,7 +2,9 @@ package com.epicodus.pocketpomodoro.views;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.epicodus.pocketpomodoro.Constants;
 import com.epicodus.pocketpomodoro.R;
 import com.epicodus.pocketpomodoro.adapters.CardListAdapter;
 import com.epicodus.pocketpomodoro.contracts.CreateDeckDisplayContract;
@@ -39,6 +42,7 @@ public class CreateDeckDisplayFragment extends Fragment implements View.OnClickL
     CardListAdapter adapter;
     private CreateDeckDisplayContract.Presenter mPresenter;
     OnCardAddedListener mOnCardAddedListener;
+    private SharedPreferences mSharedPreferences;
 
     public CreateDeckDisplayFragment() {
         // Required empty public constructor
@@ -64,7 +68,9 @@ public class CreateDeckDisplayFragment extends Fragment implements View.OnClickL
 
         Log.d("it", "works");
 
-        mPresenter = new CreateDeckDisplayPresenter(this);
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String uid = mSharedPreferences.getString(Constants.KEY_UID, "");
+        mPresenter = new CreateDeckDisplayPresenter(this, uid);
 
         mCreateDeckButton.setOnClickListener(this);
 

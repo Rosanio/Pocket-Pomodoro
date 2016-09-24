@@ -16,13 +16,15 @@ public class CreateDeckDisplayPresenter implements CreateDeckDisplayContract.Pre
     private CreateDeckDisplayContract.View mView;
     private Firebase mDecksRef;
     private Firebase mCardsRef;
+    private Firebase mUserRef;
 
     private ArrayList<Card> mCards = new ArrayList<>();
 
-    public CreateDeckDisplayPresenter(CreateDeckDisplayContract.View view) {
+    public CreateDeckDisplayPresenter(CreateDeckDisplayContract.View view, String uid) {
         mView = view;
         mDecksRef = new Firebase(Constants.FIREBASE_URL_DECKS);
         mCardsRef = new Firebase(Constants.FIREBASE_URL_CARDS);
+        mUserRef = (new Firebase(Constants.FIREBASE_URL_USERS)).child(uid);
     }
 
     public void createDeck(String name, String category) {
@@ -56,6 +58,7 @@ public class CreateDeckDisplayPresenter implements CreateDeckDisplayContract.Pre
         Date deckCreatedDate = new Date();
         deck.setDate(-deckCreatedDate.getTime());
         newDeckRef.setValue(deck);
+        mUserRef.child("decks").child(deckId).setValue(deck);
         return deckId;
     }
 
