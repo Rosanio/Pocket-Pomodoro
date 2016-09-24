@@ -55,6 +55,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.epicodus.pocketpomodoro.views.MainActivity" />
         </activity>
+        <activity android:name=".views.UpdateDeckActivity"></activity>
     </application>
 
 </manifest>
