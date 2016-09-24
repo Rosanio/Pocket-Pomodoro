@@ -16,6 +16,7 @@ public class CreateDeckDisplayPresenter implements CreateDeckDisplayContract.Pre
     private CreateDeckDisplayContract.View mView;
     private Firebase mDecksRef;
     private Firebase mCardsRef;
+    private Firebase mUserRef;
 
     private ArrayList<Card> mCards = new ArrayList<>();
 
@@ -23,12 +24,13 @@ public class CreateDeckDisplayPresenter implements CreateDeckDisplayContract.Pre
         mView = view;
         mDecksRef = new Firebase(Constants.FIREBASE_URL_DECKS);
         mCardsRef = new Firebase(Constants.FIREBASE_URL_CARDS);
+        mUserRef = new Firebase(Constants.FIREBASE_URL_USERS);
     }
 
     public void createDeck(String name, String category, String uid) {
         if(name.length()>0 && category.length()>0) {
             name = Character.toUpperCase(name.charAt(0)) + name.substring(1);
-            Deck newDeck = new Deck(name, category, uid);
+            Deck newDeck = new Deck(name, category);
             createCardsInFirebase(createDeckInFirebase(newDeck, uid));
 
             mView.navigateToMain();
@@ -50,13 +52,13 @@ public class CreateDeckDisplayPresenter implements CreateDeckDisplayContract.Pre
     }
 
     private String createDeckInFirebase(Deck deck, String uid) {
-
-        Firebase newDeckRef = mDecksRef.child(uid).push();
+        Firebase newDeckRef = mDecksRef.push();
         String deckId = newDeckRef.getKey();
         deck.setId(deckId);
         Date deckCreatedDate = new Date();
         deck.setDate(-deckCreatedDate.getTime());
         newDeckRef.setValue(deck);
+        mUserRef.child(uid).child(deckId).setValue(deck);
         return deckId;
     }
 
