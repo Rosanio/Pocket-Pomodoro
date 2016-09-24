@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.epicodus.pocketpomodoro.views.AdjustDeckFragment"
+    android:paddingTop="30dp"
+    android:paddingBottom="30dp">
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:id="@+id/updateLinearLayout">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update"
+                android:id="@+id/updateDeckButton"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_weight="0.02" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:id="@+id/deleteLinearLayout">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:id="@+id/deleteDeckButton"
+                android:layout_alignBottom="@+id/updateDeckButton"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="false"
+                android:layout_weight="0.02"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
