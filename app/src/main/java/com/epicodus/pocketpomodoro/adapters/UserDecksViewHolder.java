@@ -44,7 +44,8 @@ public class UserDecksViewHolder extends RecyclerView.ViewHolder {
         mActivity = (MyDecksContract) mContext;
         mDecks = decks;
         itemView.setOnClickListener(v -> {
-            mActivity.createAdjustDeckDialog();
+            int itemPosition = getLayoutPosition();
+            mActivity.createAdjustDeckDialog(itemPosition, mDecks);
         });
     }
 

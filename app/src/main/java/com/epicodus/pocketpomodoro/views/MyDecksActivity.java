@@ -17,6 +17,8 @@ import com.epicodus.pocketpomodoro.util.NpaLinearLayoutManager;
 import com.firebase.client.Firebase;
 import com.firebase.client.Query;
 
+import java.util.ArrayList;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -42,9 +44,9 @@ public class MyDecksActivity extends AppCompatActivity implements MyDecksContrac
     }
 
     @Override
-    public void createAdjustDeckDialog() {
+    public void createAdjustDeckDialog(int itemPosition, ArrayList<Deck> decks) {
         FragmentManager fm = getSupportFragmentManager();
-        AdjustDeckFragment dialogFragment = AdjustDeckFragment.newInstance("");
+        AdjustDeckFragment dialogFragment = AdjustDeckFragment.newInstance(itemPosition, decks);
         dialogFragment.show(fm, "fragment_adjust_deck");
     }
 }
