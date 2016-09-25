@@ -1,0 +1,29 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.epicodus.pocketpomodoro.views.AddCardFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newCardQuestionEditText"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:hint="Question"
+        android:layout_marginTop="20dp"
+        android:inputType="text" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newCardAnswerEditText"
+        android:layout_below="@+id/newCardQuestionEditText"
+        android:layout_centerHorizontal="true"
+        android:imeOptions="actionDone"
+        android:hint="Answer"
+        android:layout_marginBottom="20dp"
+        android:inputType="text" />
+</RelativeLayout>

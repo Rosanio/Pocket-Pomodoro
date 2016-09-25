@@ -1,5 +1,7 @@
 package com.epicodus.pocketpomodoro.views;
 
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -22,15 +24,16 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class UpdateDeckActivity extends AppCompatActivity {
+public class UpdateDeckActivity extends AppCompatActivity implements AddCardFragment.AddCardDialogListener {
     @Bind(R.id.deckNameEditText) EditText mDeckNameEditText;
     @Bind(R.id.deckCategoryEditText) EditText mDeckCategoryEditText;
     @Bind(R.id.myCardsRecyclerView) RecyclerView mCardsRecyclerView;
+    @Bind(R.id.addCardFab) FloatingActionButton mAddCardFab;
 
     private Deck mDeck;
     private ArrayList<Card> mCards;
 
-    private Query mCardsRef;
+    private Firebase mCardsRef;
     private FirebaseMyCardsListAdapter mMyCardsAdapter;
 
     @Override
@@ -45,13 +48,29 @@ public class UpdateDeckActivity extends AppCompatActivity {
         mDeckCategoryEditText.setText(mDeck.getCategory());
 
         mCardsRef = (new Firebase(Constants.FIREBASE_URL_CARDS)).child(mDeck.getId());
-        Log.d(mCardsRef+"", "");
         populateCardsRecyclerView();
+
+        mAddCardFab.setOnClickListener(v -> {
+            showNewCardDialog();
+        });
     }
 
     public void populateCardsRecyclerView() {
-        mMyCardsAdapter = new FirebaseMyCardsListAdapter(mCardsRef, Card.class);
+        Query firebaseCardsQuery = mCardsRef;
+        mMyCardsAdapter = new FirebaseMyCardsListAdapter(firebaseCardsQuery, Card.class);
         mCardsRecyclerView.setLayoutManager(new NpaLinearLayoutManager(this));
         mCardsRecyclerView.setAdapter(mMyCardsAdapter);
+    }
+
+    public void showNewCardDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        AddCardFragment frag = AddCardFragment.newInstance();
+        frag.show(fm, "fragment_add_card");
+    }
+
+    @Override
+    public void onFinishEditDialog(String question, String answer) {
+        Card newCard = new Card(question, answer);
+        mCardsRef.push().setValue(newCard);
     }
 }
